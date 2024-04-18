@@ -1,4 +1,3 @@
-setwd("../../project")
 dir = "./NOAA_DATA"
 folder_names = seq(2000,2024,length.out=25)
 # First Dataset
