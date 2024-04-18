@@ -114,7 +114,8 @@ station_info <- unique(station_info)
 # Rename columns
 colnames(station_info) <- c("station_id","station_name","state",
                             "longitude","latitude")
-
+# Save the data frame as a .RData file
+save(station_info,file="./seesaw/data/station_info.RData")
 # Second Dataset
 # Around 11mb as an .RData file 
 # Follow the video to see how to document the datasets 
