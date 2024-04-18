@@ -43,3 +43,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+
+# Data
+NOAA_DATA/*
+
