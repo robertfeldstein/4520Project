@@ -12,12 +12,30 @@ yearly_cycle_station <- function(id){
   station_data <- full_table[full_table$WBANNO == id,]
   station_data$DOY <- as.numeric(format(station_data$LST_DATE, "%j"))
 
+  # First: Add sines and cosines to the dataset, then perform linear regression
+  station_data$SIN_DOY <- sin(2 * pi * station_data$DOY / 365)
+  station_data$COS_DOY <- cos(2 * pi * station_data$DOY / 365)
+
+  # Second: Perform linear regression
+  lm_fit <- lm(T_DAILY_AVG ~ SIN_DOY + COS_DOY, data = station_data)
+
+  # Third: Extract the coefficients
+  lm_fit$coefficients
+
+  # Fourth: Create a data frame with the expected temperature for each day
+  expected_temps <- data.frame(DOY = 1:365)
+  expected_temps$Expected_AVG_T <- lm_fit$coefficients[1] +
+    lm_fit$coefficients[2] * sin(2 * pi * expected_temps$DOY / 365) +
+    lm_fit$coefficients[3] * cos(2 * pi * expected_temps$DOY / 365)
+
+  return(expected_temps)
+
 }
 
-station_data <- full_table[full_table$WBANNO == "53878",]
-station_data$DOY <- as.numeric(format(station_data$LST_DATE, "%j"))
-# Note: How do we deal with leap years? Some years have a 366th day?
-# Note: How do we deal with missing data? Some days have no data?
+# Test the function
+yearly_cycle_station("3047")
 
-# First: Add sines and cosines to the dataset, then perform linear regression
+
+
+
 
