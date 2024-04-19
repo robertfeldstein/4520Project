@@ -122,6 +122,72 @@ save(station_info,file="./seesaw/data/station_info.RData")
 # Package will have a data directory, the .Rdata files should be in this folder
 # This script, and the true data will not be put into the package
 
+# The full daily dataset with the following columns:
+#   • WBANNO, state, station name, LST_DATE, CRX_VN, LONGITUDE, LATITUDE,
+# T_DAILY_MAX, T_DAILY_MIN, T_DAILY_MEAN, T_DAILY_AVG, P_DAILY_CALC,
+# SOLARAD_DAILY
+# Convert missing value codes into NAs. The date column should be in R’s date format. Be sure to
+# document your dataset, explaining what each column means.
+
+extract_necessary <- function(txt_file){
+  table <- read.table(txt_file,header=F)
+  # Headers
+  headers <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
+               "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
+               "P_DAILY_CALC","SOLARAD_DAILY", "SUR_TEMP_DAILY_TYPE", 
+               "SUR_TEMP_DAILY_MAX", "SUR_TEMP_DAILY_MIN", "SUR_TEMP_DAILY_AVG",
+               "RH_DAILY_MAX", "RH_DAILY_MIN", "RH_DAILY_AVG", 
+               "SOIL_MOISTURE_5_DAILY", "SOIL_MOISTURE_10_DAILY", 
+               "SOIL_MOISTURE_20_DAILY","SOIL_MOISTURE_50_DAILY", 
+               "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY", 
+               "SOIL_TEMP_10_DAILY", "SOIL_TEMP_20_DAILY",
+               "SOIL_TEMP_50_DAILY", "SOIL_TEMP_100_DAILY")
+  colnames(table) <- headers
+  # Convert missing value codes into NAs
+  table[table == -9999] <- NA
+  table[table == -99] <- NA
+  
+  # Convert the date column to R's date format
+  table$LST_DATE <- as.Date(as.character(table$LST_DATE),format="%Y%m%d")
+  
+  #Subset the table to only include the necessary columns
+  table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
+                    "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
+                    "P_DAILY_CALC","SOLARAD_DAILY")]
+  return(table)
+}
+
+# Loop through all of the directories and extract the necessary information
+# Combine into one data frame
+full_table <- data.frame(matrix(ncol=11, nrow=1.25E6))
+colnames(full_table) <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
+                          "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
+                          "P_DAILY_CALC","SOLARAD_DAILY")
+
+# Initialize a counter for row index
+row_index <- 1
+
+for (folder in folder_names){
+  # Get the list of files in the directory
+  files <- list.files(paste0(dir,"/",folder))
+  # Loop over the files
+  for (file in files){
+    # Extract the necessary information
+    table <- extract_necessary(paste0(dir,"/",folder,"/",file))
+    # Get the number of rows in the extracted table
+    num_rows <- nrow(table)
+    # Add the rows to the full table
+    full_table[row_index:(row_index + num_rows - 1), ] <- table
+    # Update the row index
+    row_index <- row_index + num_rows
+  }
+}
+
+#Remove rows with all NAs
+full_table <- full_table[complete.cases(full_table),]
+
+# Save the data frame as a .RData file
+save(full_table,file="./seesaw/data/daily_data.RData")
 
 
 
