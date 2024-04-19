@@ -1,7 +1,7 @@
 dir = "./NOAA_DATA"
 folder_names = seq(2000,2024,length.out=25)
 # First Dataset
-# A dataset with with one row for each station, providing information about 
+# A dataset with with one row for each station, providing information about
 # the station identifier, station name, state, longitude, and latitude
 # We will need to load in data from all of the years
 # One row for each station, station identifier (WBANNO)
@@ -85,7 +85,7 @@ attribute_extract <- function(txt_file){
   # Extract the latitude
   latitude = as.numeric(words[5])
   # Return the named vector
-  return(c("station_id" = station_id, "station_name" = station_name, "state" = 
+  return(c("station_id" = station_id, "station_name" = station_name, "state" =
              state, "longitude" = longitude, "latitude" = latitude))
 }
 
@@ -117,8 +117,8 @@ colnames(station_info) <- c("station_id","station_name","state",
 # Save the data frame as a .RData file
 save(station_info,file="./seesaw/data/station_info.RData")
 # Second Dataset
-# Around 11mb as an .RData file 
-# Follow the video to see how to document the datasets 
+# Around 11mb as an .RData file
+# Follow the video to see how to document the datasets
 # Package will have a data directory, the .Rdata files should be in this folder
 # This script, and the true data will not be put into the package
 
@@ -133,12 +133,12 @@ extract_necessary <- function(txt_file){
   # Headers
   headers <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
-               "P_DAILY_CALC","SOLARAD_DAILY", "SUR_TEMP_DAILY_TYPE", 
+               "P_DAILY_CALC","SOLARAD_DAILY", "SUR_TEMP_DAILY_TYPE",
                "SUR_TEMP_DAILY_MAX", "SUR_TEMP_DAILY_MIN", "SUR_TEMP_DAILY_AVG",
-               "RH_DAILY_MAX", "RH_DAILY_MIN", "RH_DAILY_AVG", 
-               "SOIL_MOISTURE_5_DAILY", "SOIL_MOISTURE_10_DAILY", 
-               "SOIL_MOISTURE_20_DAILY","SOIL_MOISTURE_50_DAILY", 
-               "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY", 
+               "RH_DAILY_MAX", "RH_DAILY_MIN", "RH_DAILY_AVG",
+               "SOIL_MOISTURE_5_DAILY", "SOIL_MOISTURE_10_DAILY",
+               "SOIL_MOISTURE_20_DAILY","SOIL_MOISTURE_50_DAILY",
+               "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY",
                "SOIL_TEMP_10_DAILY", "SOIL_TEMP_20_DAILY",
                "SOIL_TEMP_50_DAILY", "SOIL_TEMP_100_DAILY")
   table <- read.table(txt_file,header=F)
@@ -148,9 +148,9 @@ extract_necessary <- function(txt_file){
   # Convert missing value codes into NAs
   table[table == -9999] <- NA
   table[table == -99] <- NA
-  
-  
-  
+
+
+
   #Subset the table to only include the necessary columns
   table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                     "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
@@ -189,9 +189,9 @@ for (folder in folder_names){
 #Remove rows with all NAs
 full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 
-## If desired, convert LST_DATE from the number of days since Jan 1, 1970 to a 
+## If desired, convert LST_DATE from the number of days since Jan 1, 1970 to a
 ## R Date object
-# full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
+full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
 
 # Save the data frame as a .RData file
 save(full_table,file="./seesaw/data/daily_data.RData")
