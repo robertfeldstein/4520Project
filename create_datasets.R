@@ -130,7 +130,6 @@ save(station_info,file="./seesaw/data/station_info.RData")
 # document your dataset, explaining what each column means.
 
 extract_necessary <- function(txt_file){
-  table <- read.table(txt_file,header=F)
   # Headers
   headers <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
@@ -142,13 +141,15 @@ extract_necessary <- function(txt_file){
                "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY", 
                "SOIL_TEMP_10_DAILY", "SOIL_TEMP_20_DAILY",
                "SOIL_TEMP_50_DAILY", "SOIL_TEMP_100_DAILY")
+  table <- read.table(txt_file,header=F,colClasses = c(rep("character", length(headers))))
   colnames(table) <- headers
+  # Convert the date column to R's date format
+  table$LST_DATE <- as.Date(as.character(table$LST_DATE),format = "%Y%m%d")
   # Convert missing value codes into NAs
   table[table == -9999] <- NA
   table[table == -99] <- NA
   
-  # Convert the date column to R's date format
-  table$LST_DATE <- as.Date(as.character(table$LST_DATE),format="%Y%m%d")
+  
   
   #Subset the table to only include the necessary columns
   table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
@@ -156,6 +157,8 @@ extract_necessary <- function(txt_file){
                     "P_DAILY_CALC","SOLARAD_DAILY")]
   return(table)
 }
+
+tab <- extract_necessary("./NOAA_DATA/2000/CRND0103-2000-NC_Asheville_8_SSW.txt")
 
 # Loop through all of the directories and extract the necessary information
 # Combine into one data frame
