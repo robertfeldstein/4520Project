@@ -97,7 +97,7 @@ example_txt <- attribute_extract(
 station_info <- data.frame(matrix(ncol=5,nrow=0))
 colnames(station_info) <- c("station_id","station_name",
                             "state","longitude","latitude")
-print(station_info)
+
 for (folder in folder_names){
   # Get the list of files in the directory
   files <- list.files(paste0(dir,"/",folder))
@@ -141,7 +141,7 @@ extract_necessary <- function(txt_file){
                "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY", 
                "SOIL_TEMP_10_DAILY", "SOIL_TEMP_20_DAILY",
                "SOIL_TEMP_50_DAILY", "SOIL_TEMP_100_DAILY")
-  table <- read.table(txt_file,header=F,colClasses = c(rep("character", length(headers))))
+  table <- read.table(txt_file,header=F)
   colnames(table) <- headers
   # Convert the date column to R's date format
   table$LST_DATE <- as.Date(as.character(table$LST_DATE),format = "%Y%m%d")
@@ -158,7 +158,7 @@ extract_necessary <- function(txt_file){
   return(table)
 }
 
-tab <- extract_necessary("./NOAA_DATA/2000/CRND0103-2000-NC_Asheville_8_SSW.txt")
+tab <- extract_necessary("./NOAA_DATA/2012/CRND0103-2012-NC_Asheville_8_SSW.txt")
 
 # Loop through all of the directories and extract the necessary information
 # Combine into one data frame
@@ -180,14 +180,18 @@ for (folder in folder_names){
     # Get the number of rows in the extracted table
     num_rows <- nrow(table)
     # Add the rows to the full table
-    full_table[row_index:(row_index + num_rows - 1), ] <- table
+    full_table[row_index:(row_index + num_rows - 1), colnames(table) ] <- table
     # Update the row index
     row_index <- row_index + num_rows
   }
 }
 
 #Remove rows with all NAs
-full_table <- full_table[complete.cases(full_table),]
+full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
+
+## If desired, convert LST_DATE from the number of days since Jan 1, 1970 to a 
+## R Date object
+# full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
 
 # Save the data frame as a .RData file
 save(full_table,file="./seesaw/data/daily_data.RData")
