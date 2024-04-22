@@ -8,7 +8,7 @@ library(sf)
 
 # Function to create a grid of points within the contiguous USA
 grid_usa <- function(resolution=200) {
-  # Perhaps this should be an RDS file?
+  # Read in the shapefile from the RDS file
   shapefile <- readRDS("data/usa_shp.rds")
   multi_polygon <- st_geometry(shapefile)
   # Get x and y coordinates of the multi-polygon
@@ -21,11 +21,12 @@ grid_usa <- function(resolution=200) {
   grid <- expand.grid(x = x, y = y)
   grid <- st_as_sf(grid, coords = c("x", "y"), crs = 4269)
   grid <- st_transform(grid, crs = st_crs(shapefile))
+  # Use sf package to determine the points that intersect the shapefile
   grid$inside <- st_within(grid, shapefile)
-  # Check if grid$inside is a list or an integer
   grid$inside <- lengths(grid$inside) > 0
   # Return the grid points that are in the polygon
   grid <- grid[grid$inside, ]
+  # Convert back into a dataframe and reformat
   grid_df <- as.data.frame(grid)
   grid_df$coordinates <- st_coordinates(grid_df$geometry)
   grid_df$x <- grid_df$coordinates[, 1]
@@ -33,8 +34,7 @@ grid_usa <- function(resolution=200) {
   grid_df <- grid_df[, c("x", "y")]
 
   # Filter out the points that are not in the United States bounding box
-  # 24.396308 to 49.384358 degrees latitude in the north, and -125.0 to -66.93457
-
+  # Here we are removing Alaska, Hawaii, and the territories
   grid_df <- grid_df[grid_df$x > -125.0 & grid_df$x < -66.93457 & grid_df$y >
                        24.396308 & grid_df$y < 49.384358, ]
   return(grid_df)
