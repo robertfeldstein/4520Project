@@ -8,7 +8,8 @@ library(sf)
 
 # Function to create a grid of points within the contiguous USA
 grid_usa <- function(resolution=200) {
-  shapefile <- st_read("../usa_shp",quiet = TRUE)
+  # Perhaps this should be an RDS file?
+  shapefile <- readRDS("data/usa_shp.rds")
   multi_polygon <- st_geometry(shapefile)
   # Get x and y coordinates of the multi-polygon
   x_coords <- st_coordinates(multi_polygon)[, 1]
