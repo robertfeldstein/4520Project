@@ -23,7 +23,6 @@ trend_of_temps <- function(){
   }
 
   for (station in 1:length(stations)) {
-    print(station)
     station_slopes <- numeric(12)
     # Filter the data to include only the station of interest
     for (month in 1:12){
@@ -45,10 +44,6 @@ trend_of_temps <- function(){
   slope_coefs$mean <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
   return(slope_coefs)
 }
-
-val <- trend_of_temps()
-View(val)
-mean(val$slope_coef, na.rm = TRUE)
 
 
 
