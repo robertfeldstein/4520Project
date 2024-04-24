@@ -1,9 +1,19 @@
-# A function for creating a grid of points that fall within the contiguous USA.
-# You may consider using external packages to get map data and find points
-# inside a polygon. Your function should have argument(s) for controlling the
-# resolution of the grid.
 
-# Function to create a grid of points within the contiguous USA
+#' Create a grid of points over the contiguous United States
+#'
+#' This function creates a grid of points over the contiguous United States.
+#' The grid points are generated within the bounding box of the contiguous
+#' United States and does not include points over Alaska, Hawaii, or any of
+#' the territories.
+#'
+#' @param resolution The number of points to generate in each dimension of the
+#' grid.
+#'
+#' @return A data frame containing the grid points within the contiguous
+#' United States.
+#'
+#' @examples
+#' grid_usa(100)
 usagrid <- function(resolution=200) {
   # Read in the shapefile from the RDS file
   shapefile <- readRDS("data/usa_shp.rds")

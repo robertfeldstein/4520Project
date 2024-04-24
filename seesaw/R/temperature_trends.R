@@ -2,11 +2,9 @@
 # in units of degrees Celsius per year.
 
 trend_of_temps <- function(){
-
   # Load in files
-  load("data/daily_data.RData")
+  load("data/full_table.RData")
   load("data/station_info.RData")
-
 
   stations <- unique(full_table$WBANNO)
   slope_coefs <- numeric(length(stations))

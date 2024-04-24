@@ -1,15 +1,33 @@
-# A function for interpolating data from the stations to a grid points within
-# the contiguous USA.
+#'
+#' A function for interpolating data from the stations to a grid points within
+#' the contiguous USA.
+#'
+#' The function takes a start, end date, variable, and resolution as input to
+#' interpolate that variable over the lower 48 states during that time perdod.
+#'
+#' @param start_date The start date to interpolate the variable for. Expects a
+#' date in the format of the LST_DATE column in the full_table data frame. This
+#' format is "YYYY-MM-DD".
+#'
+#' @param end_date The end date to interpolate the variable for. Expects a date
+#' in the format of the LST_DATE column in the full_table data frame. This
+#' format is "YYYY-MM-DD".
+#'
+#' @param var The variable to interpolate. Default is "T_DAILY_AVG". Variable
+#' must be a column in the full_table data frame. For a list of variables, see
+#' the full_table data frame documentation.
+#'
+#' @param resolution The resolution of the grid to interpolate the variable over.
+#'
+#' @return A data frame containing the interpolated values for the specified
+#' variable over the contiguous USA.
+#'
+#' @examples
+#' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
 
-# internal function
-#source("./R/grid_usa.R")
 
-## use devtools::load_all()
-# external package
-
-# Var is the variable to interpolate over the stations
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG", resolution = 200) {
-  df <- load("./data/daily_data.RData")
+  df <- load("./data/full_table.RData")
   # Create a grid of points within the contiguous USA
   grid <- usagrid(resolution)
   # Subset full_table

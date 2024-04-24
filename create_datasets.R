@@ -194,7 +194,7 @@ full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
 
 # Save the data frame as a .RData file
-save(full_table,file="./seesaw/data/daily_data.RData")
+save(full_table,file="./seesaw/data/full_table.RData")
 
 
 

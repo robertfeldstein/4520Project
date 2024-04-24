@@ -2,6 +2,13 @@
 
 devtools::load_all("../seesaw")
 
+devtools::test()
+
+devtools::document()
+
+?time_series_station
+?usagrid
+
 val <- trend_of_temps()
 View(val)
 mean(val$slope_coef, na.rm = TRUE)

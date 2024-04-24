@@ -5,7 +5,7 @@
 
 yearly_cycle_station <- function(id){
   # Load in files
-  load("data/daily_data.RData")
+  load("data/full_table.RData")
   load("data/station_info.RData")
 
   # Extract the station data
