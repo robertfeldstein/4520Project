@@ -8,6 +8,7 @@ devtools::document()
 
 ?time_series_station
 ?usagrid
+?interpolate_grid
 
 val <- trend_of_temps()
 View(val)
