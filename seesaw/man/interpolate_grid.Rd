@@ -28,7 +28,7 @@ variable over the contiguous USA.
 }
 \description{
 The function takes a start, end date, variable, and resolution as input to
-interpolate that variable over the lower 48 states during that time perdod.
+interpolate that variable over the lower 48 states during that time period.
 }
 \examples{
 interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)

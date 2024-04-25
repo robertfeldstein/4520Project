@@ -3,7 +3,7 @@
 #' the contiguous USA.
 #'
 #' The function takes a start, end date, variable, and resolution as input to
-#' interpolate that variable over the lower 48 states during that time perdod.
+#' interpolate that variable over the lower 48 states during that time period.
 #'
 #' @param start_date The start date to interpolate the variable for. Expects a
 #' date in the format of the LST_DATE column in the full_table data frame. This
