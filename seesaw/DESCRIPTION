@@ -3,8 +3,8 @@ Type: Package
 Title: Spatial Interpolation of United States Weather Data
 Version: 0.1.0
 Authors@R: 
-    person("Robert Feldstein", email = "rhf83@cornell.edu", role = c("aut", "cre")),
-    person("Ava Glowney", email = "arg259@cornell.edu", role = "aut")
+    c(person("Robert Feldstein", email = "rhf83@cornell.edu", role = c("aut", "cre")),
+    person("Ava Glowney", email = "arg259@cornell.edu", role = "aut"))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
@@ -16,3 +16,5 @@ Imports:
   GpGp,
   sf
 RoxygenNote: 7.3.1
+Depends: 
+    R (>= 2.10)

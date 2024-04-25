@@ -48,3 +48,10 @@ readRDS("data/usa_shp.rds")
 
 ?station_info
 ?full_table
+
+# This did not quite work
+shp_file <- readRDS("data/usa_shp.rds")
+
+usethis::use_data(shp_file, internal = TRUE)
+
+load("R/sysdata.rda")
