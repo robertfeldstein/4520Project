@@ -4,7 +4,7 @@
 \alias{graph_interp}
 \title{A function that graphs an interpolation of values over the US.}
 \usage{
-graph_interp(preds, resolution)
+graph_interp(preds, grid)
 }
 \arguments{
 \item{preds}{A vector of predictions to be interpolated over the US grid. Preds

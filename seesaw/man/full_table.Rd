@@ -8,7 +8,7 @@
 A data frame with 11 columns and 1134352 rows
 
 \describe{
-\item{WABANNO}{The unique identifier for each weather station}
+\item{WBANNO}{The unique identifier for each weather station}
 \item{LST_DATE}{The date of the weather data}
 \item{CRX_VN}{The version number of the station datalogger program that was in
 effect at the time of the observation. Note: This field should be

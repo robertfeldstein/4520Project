@@ -47,3 +47,15 @@ shp_file <- readRDS("data/usa_shp.rds")
 usethis::use_data(shp_file, internal = TRUE)
 
 load("R/sysdata.rda")
+
+
+# Plot a yearly cycle
+
+cycle <- yearly_cycle_station("53878")
+ggplot(data = cycle, aes(x = DOY, y = Expected_AVG_T)) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = "Yearly Cycle of T_DAILY_AVG at Station 53878") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+trend_of_temps()

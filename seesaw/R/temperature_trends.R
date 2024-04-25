@@ -1,10 +1,35 @@
-# A function for estimating the trend of temperatures over time,
-# in units of degrees Celsius per year.
+#' A function for estimating the trend of temperatures over time,
+#' in units of degrees Celsius per year.
+#'
+#' @param station_id A character vector of station IDs to include in the analysis.
+#' If NULL, all stations are included. Station IDs should be in the format "99999".
+#' @param date_start A character vector of the start date for the analysis. It
+#' should be in the format "YYYY-MM-DD".
+#' @param date_end A character vector of the end date for the analysis. It should
+#' be in the format "YYYY-MM-DD".
+#' @return A data frame with the station ID and a column for each month of the year.
+#' The column value represents the slope of the temperature trend in degrees Celsius
+#' of the first day of the month over the time period specified. One final column
+#' in the dataframe stores the mean of the monthly slopes.
+#' @examples
+#' trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
 
-trend_of_temps <- function(){
+trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
+                           date_end = "2020-12-31"){
   # Load in files
   load("data/full_table.RData")
   load("data/station_info.RData")
+
+  # Check that the station_id is properly formatted
+  # Add leading zeros if necessary
+  if (!is.null(station_id)) {
+    station_id <- as.character(as.numeric(station_id))
+    full_table <- full_table[full_table$WBANNO %in% station_id, ]
+  }
+
+  # Filter the data to include only the dates of interest
+  full_table <- full_table[full_table$LST_DATE >= date_start
+                           & full_table$LST_DATE <= date_end, ]
 
   stations <- unique(full_table$WBANNO)
   slope_coefs <- numeric(length(stations))
@@ -42,6 +67,4 @@ trend_of_temps <- function(){
   slope_coefs$mean <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
   return(slope_coefs)
 }
-
-
 
