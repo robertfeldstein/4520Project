@@ -27,7 +27,7 @@ usagrid <- function(resolution=200) {
   y <- seq(min(y_coords), max(y_coords), length.out = resolution)
   grid <- expand.grid(x = x, y = y)
   grid <- sf::st_as_sf(grid, coords = c("x", "y"), crs = 4269)
-  grid <- sf::st_transform(grid, crs = st_crs(shapefile))
+  grid <- sf::st_transform(grid, crs = sf::st_crs(shapefile))
   # Use sf package to determine the points that intersect the shapefile
   grid$inside <- sf::st_within(grid, shapefile)
   grid$inside <- lengths(grid$inside) > 0

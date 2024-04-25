@@ -19,8 +19,7 @@
 #' graph_interp(preds, 200)
 
 
-graph_interp <- function(preds,resolution){
-  grid <- grid_usa(resolution)
+graph_interp <- function(preds,grid){
   locs_pred <- grid[, c("x", "y")]
   ggplot2::ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
                                                    y = locs_pred[,"y"],

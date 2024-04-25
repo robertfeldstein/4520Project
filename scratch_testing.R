@@ -32,15 +32,7 @@ locs_pred <- grid[, c("x", "y")]
 preds <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
 
 # For now use ggplot to plot the interpolated values
-library(ggplot2)
-ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
-                                        y = locs_pred[,"y"], fill = preds)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  coord_quickmap() +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "Interpolated T_DAILY_AVG values")
+graph_interp(preds,grid)
 
 load("data/full_table.RData")
 load("data/station_info.RData")
