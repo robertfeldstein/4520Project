@@ -45,3 +45,6 @@ ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
 load("data/full_table.RData")
 load("data/station_info.RData")
 readRDS("data/usa_shp.rds")
+
+?station_info
+?full_table
