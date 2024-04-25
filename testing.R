@@ -42,5 +42,6 @@ ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
   theme(legend.position = "bottom") +
   labs(title = "Interpolated T_DAILY_AVG values")
 
-
-
+load("data/full_table.RData")
+load("data/station_info.RData")
+readRDS("data/usa_shp.rds")
