@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(4520Project)
+library(seesaw)
 
-test_check("4520Project")
+test_check("seesaw")
