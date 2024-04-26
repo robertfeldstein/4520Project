@@ -1,7 +1,22 @@
-# A function for estimating the yearly cycle for one station. A yearly cycle is
-# simply the expected temperature on each day of the year. The function should
-# return a data frame with row for each day, a column for day number (1-365),
-# and a column for the expected average temperature on each day
+#'
+#' A function for estimating the yearly cycle for one station.
+#'
+#'  A function for estimating the yearly cycle for one station. A yearly cycle is
+#' simply the expected temperature on each day of the year.
+#'
+#' @param id The WBANNO of the station to estimate the yearly cycle for, formatted
+#' as a character. Expects a WBANNO present in the station_info data frame.
+#' @param variable The variable to estimate the yearly cycle for.
+#' Default is "T_DAILY_AVG". Expects a variable present in the full_table
+#' data frame.
+#'
+#' @return A data frame with the expected variable value for each day of the
+#' year.
+#'
+#' @examples
+#' yearly_cycle_station("3013")
+#'
+#'
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   # Load in files
@@ -17,8 +32,9 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   station_data$COS_DOY <- cos(2 * pi * station_data$DOY / 365)
 
   #Perform linear regression
+  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY")
 
-  lm_fit <- lm(variable ~ SIN_DOY + COS_DOY, data = station_data)
+  lm_fit <- lm(formula_str, data = station_data)
 
   #Create a data frame with the expected temperature for each day
   expected_temps <- data.frame(DOY = 1:365)
@@ -29,6 +45,7 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   return(expected_temps)
 
 }
+
 
 
 

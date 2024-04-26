@@ -1,6 +1,6 @@
 # Testing file
 
-devtools::load_all("../seesaw")
+devtools::load_all("./")
 
 devtools::test()
 
@@ -51,11 +51,12 @@ load("R/sysdata.rda")
 
 # Plot a yearly cycle
 
-cycle <- yearly_cycle_station("53878")
+library(ggplot2)
+cycle <- yearly_cycle_station("53878","T_DAILY_MIN")
 ggplot(data = cycle, aes(x = DOY, y = Expected_AVG_T)) +
   geom_line() +
   theme_minimal() +
   labs(title = "Yearly Cycle of T_DAILY_AVG at Station 53878") +
   theme(plot.title = element_text(hjust = 0.5))
 
-trend_of_temps()
+
