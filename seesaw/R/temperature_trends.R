@@ -21,6 +21,7 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   load("data/station_info.RData")
 
   # Check that the station_id is properly formatted
+  ################################# DO WE ACTUALLY ADD LEADING ZEROS IF NECESSARY (i though that is why we have to find unique station ids)
   # Add leading zeros if necessary
   if (!is.null(station_id)) {
     station_id <- as.character(as.numeric(station_id))
@@ -30,41 +31,57 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   # Filter the data to include only the dates of interest
   full_table <- full_table[full_table$LST_DATE >= date_start
                            & full_table$LST_DATE <= date_end, ]
-
+  # Find the unique station ids
   stations <- unique(full_table$WBANNO)
-  slope_coefs <- numeric(length(stations))
 
+  # Add a day and month column to the the data frame
   full_table$DAY <- as.numeric(format(full_table$LST_DATE, "%d"))
   full_table$MONTH <- as.numeric(format(full_table$LST_DATE, "%m"))
 
+  # Initialize data frame to hold slope coefficients for each unique station_id
   slope_coefs <- data.frame(station_id = stations)
+
+  # Loop through months of year
   months <- c("January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December")
   for (month in months){
+    # Create name vector
     namevector <- paste0(month, "_slope")
+    # Initialize a column (name vector) to hold slope coefficients for month
     slope_coefs[,namevector] <- NA
   }
 
+  # Loop through stations
   for (station in 1:length(stations)) {
+    # Initialize empty vector to hold slope coefficients for station
     station_slopes <- numeric(12)
-    # Filter the data to include only the station of interest
+    # Loop through months
     for (month in 1:12){
+      # Filter the data to include only the station, month of interest
+      # Use data from first of month
       station_data <- full_table[full_table$DAY == 1
                                  & full_table$MONTH == month
                                  & full_table$WBANNO == stations[station], ]
+      # Move on to next month if there are less than 2 entries
       if (nrow(station_data) < 2) {
         next
       }
+      # Fit linear model
       lm_fit <- lm(T_DAILY_AVG ~ LST_DATE, data = station_data)
+      # Extract slope
       slope <- lm_fit$coefficients[2]
 
       # Convert the slope to units of degrees Celsius per year
       slope_degrees_per_year <- slope * 365
+      # Store slope in station_slopes
       station_slopes[month] <- slope_degrees_per_year
     }
+    # Store station_slopes in row corresponding to station
     slope_coefs[station, 2:13] <- station_slopes
   }
+  # Find average slope coefficient for each station
   slope_coefs$mean <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
+
   return(slope_coefs)
 }
 

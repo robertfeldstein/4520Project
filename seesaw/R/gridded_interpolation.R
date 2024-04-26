@@ -38,6 +38,7 @@ interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG", resoluti
   # Fit the Gaussian process model
   model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere", start_parms =
                        c(42.2746, 2.6493, 0.1902, 2.0873))
+  ############################## CAN WE DELETE?
   #X_pred <- model.matrix( ~ 1, data = grid)
 
   # Make a sequence of dates

@@ -1,11 +1,14 @@
 dir = "./NOAA_DATA"
 folder_names = seq(2000,2024,length.out=25)
+
+
 # First Dataset
 # A dataset with with one row for each station, providing information about
 # the station identifier, station name, state, longitude, and latitude
 # We will need to load in data from all of the years
 # One row for each station, station identifier (WBANNO)
 # Should be close to 236 rows
+
 # Dictionary for converting state abbreviations to full names
 state_lookup <- c("AL" = "Alabama",
                   "AK" = "Alaska",
@@ -57,6 +60,7 @@ state_lookup <- c("AL" = "Alabama",
                   "WV" = "West Virginia",
                   "WI" = "Wisconsin",
                   "WY" = "Wyoming")
+
 # Function that loads in a .txt file from NOAA and extracts the
 # station identifier, station name, state, longitude, and latitude
 # and returns it as a named vector
@@ -89,6 +93,7 @@ attribute_extract <- function(txt_file){
              state, "longitude" = longitude, "latitude" = latitude))
 }
 
+# Check to make sure the function works
 example_txt <- attribute_extract(
   "./NOAA_DATA/2000/CRND0103-2000-NC_Asheville_8_SSW.txt")
 
@@ -97,7 +102,6 @@ example_txt <- attribute_extract(
 station_info <- data.frame(matrix(ncol=5,nrow=0))
 colnames(station_info) <- c("station_id","station_name",
                             "state","longitude","latitude")
-
 for (folder in folder_names){
   # Get the list of files in the directory
   files <- list.files(paste0(dir,"/",folder))
@@ -114,21 +118,34 @@ station_info <- unique(station_info)
 # Rename columns
 colnames(station_info) <- c("station_id","station_name","state",
                             "longitude","latitude")
+
 # Save the data frame as a .RData file
 save(station_info,file="./seesaw/data/station_info.RData")
+
+###################################### START DELETE
+
 # Second Dataset
 # Around 11mb as an .RData file
 # Follow the video to see how to document the datasets
 # Package will have a data directory, the .Rdata files should be in this folder
 # This script, and the true data will not be put into the package
-
-# The full daily dataset with the following columns:
-#   • WBANNO, state, station name, LST_DATE, CRX_VN, LONGITUDE, LATITUDE,
-# T_DAILY_MAX, T_DAILY_MIN, T_DAILY_MEAN, T_DAILY_AVG, P_DAILY_CALC,
-# SOLARAD_DAILY
 # Convert missing value codes into NAs. The date column should be in R’s date format. Be sure to
 # document your dataset, explaining what each column means.
+ ###################################### END DELETE
 
+# Second Dataset
+# The full daily dataset with the following columns:
+# WBANNO, state, station name, LST_DATE, CRX_VN, LONGITUDE, LATITUDE,
+# T_DAILY_MAX, T_DAILY_MIN, T_DAILY_MEAN, T_DAILY_AVG, P_DAILY_CALC,
+# SOLARAD_DAILY
+# Missing value codes are converted into NAs, the date column is in R's Date
+# format.
+
+# Function that loads in a .txt file from NOAA and returns a subset of the
+# dataset with the following columns:
+# WBANNO, state, station name, LST_DATE, CRX_VN, LONGITUDE, LATITUDE,
+# T_DAILY_MAX, T_DAILY_MIN, T_DAILY_MEAN, T_DAILY_AVG, P_DAILY_CALC,
+# SOLARAD_DAILY
 extract_necessary <- function(txt_file){
   # Headers
   headers <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
@@ -149,8 +166,6 @@ extract_necessary <- function(txt_file){
   table[table == -9999] <- NA
   table[table == -99] <- NA
 
-
-
   #Subset the table to only include the necessary columns
   table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                     "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
@@ -158,6 +173,7 @@ extract_necessary <- function(txt_file){
   return(table)
 }
 
+# Check to make sure the function works
 tab <- extract_necessary("./NOAA_DATA/2012/CRND0103-2012-NC_Asheville_8_SSW.txt")
 
 # Loop through all of the directories and extract the necessary information
@@ -166,7 +182,6 @@ full_table <- data.frame(matrix(ncol=11, nrow=1.25E6))
 colnames(full_table) <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                           "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
                           "P_DAILY_CALC","SOLARAD_DAILY")
-
 # Initialize a counter for row index
 row_index <- 1
 
@@ -185,24 +200,20 @@ for (folder in folder_names){
     row_index <- row_index + num_rows
   }
 }
-
 #Remove rows with all NAs
 full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 
-## If desired, convert LST_DATE from the number of days since Jan 1, 1970 to a
-## R Date object
+# Convert LST_DATE from the number of days since Jan 1, 1970 to a
+# R Date object
 full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
 
 # Merge full_table with station_info to include state and station_name
-
 full_table <- merge(full_table,station_info,by.x="WBANNO",by.y="station_id",all.x=TRUE)
 
 # Subset and reorder the columns
-
 full_table <- full_table[,c("WBANNO","state","station_name","LST_DATE","CRX_VN",
               "LONGITUDE","LATITUDE", "T_DAILY_MAX","T_DAILY_MIN","T_DAILY_MEAN",
               "T_DAILY_AVG", "P_DAILY_CALC","SOLARAD_DAILY")]
-
 
 # Save the data frame as a .RData file
 save(full_table,file="./seesaw/data/full_table.RData")

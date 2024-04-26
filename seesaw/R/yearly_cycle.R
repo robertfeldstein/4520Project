@@ -19,21 +19,23 @@
 #'
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
+
   # Load in files
   load("data/full_table.RData")
   load("data/station_info.RData")
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]
+
+  # Add a day of year column
   station_data$DOY <- as.numeric(format(station_data$LST_DATE, "%j"))
 
-  # Add sines and cosines to the dataset, then perform linear regression
+  # Add sines and cosines to the data frame
   station_data$SIN_DOY <- sin(2 * pi * station_data$DOY / 365)
   station_data$COS_DOY <- cos(2 * pi * station_data$DOY / 365)
 
   #Perform linear regression
   formula_str <- paste(variable, "~ SIN_DOY + COS_DOY")
-
   lm_fit <- lm(formula_str, data = station_data)
 
   #Create a data frame with the expected temperature for each day
