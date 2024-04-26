@@ -26,7 +26,7 @@
 #' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
 
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
-                             resolution = 200) {
+                             resolution = 200){
   # Load in dataset
   df <- load("./data/full_table.RData")
 
@@ -46,7 +46,7 @@ interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
   model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere",
                            start_parms = c(42.2746, 2.6493, 0.1902, 2.0873))
   # Add date column to grid of points
-  if (start_date == end_date)
+  if (start_date == end_date){
     grid$date <- start_date
     # Create prediction matrix
     X_pred <- model.matrix( ~ 1+ date, data = grid)
@@ -58,9 +58,11 @@ interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
     # Create prediction matrix
     X_pred <- cbind(1,ndat)
   }
-
+  # Extract x,y coordinates of grid points
   locs_pred <- grid[, c("x", "y")]
+  # Use model to predict response at grid points
   preds <- GpGp::predictions(model,locs_pred,X_pred)
+
   return(preds)
 
 }
