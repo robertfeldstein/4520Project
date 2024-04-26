@@ -83,5 +83,6 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   slope_coefs$mean <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
 
   return(slope_coefs)
+
 }
 

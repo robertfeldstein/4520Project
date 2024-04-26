@@ -25,36 +25,44 @@
 #' @examples
 #' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
 
-
-interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG", resolution = 200) {
+interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
+                             resolution = 200) {
+  # Load in dataset
   df <- load("./data/full_table.RData")
+
   # Create a grid of points within the contiguous USA
   grid <- usagrid(resolution)
-  # Subset full_table
-  full_table <- full_table[(full_table$LST_DATE >= start_date) & (full_table$LST_DATE <= end_date),]
+
+  # Filter the data to include only the dates of interest
+  full_table <- full_table[(full_table$LST_DATE >= start_date) &
+                             (full_table$LST_DATE <= end_date), ]
+  # Store response variable
   y <- full_table[ , var]
+  # Subset data frame and store locations
   locs <- full_table[, c("LONGITUDE", "LATITUDE")]
+  # Create model matrix
   X <- model.matrix( ~ full_table$LST_DATE, data = full_table)
   # Fit the Gaussian process model
-  model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere", start_parms =
-                       c(42.2746, 2.6493, 0.1902, 2.0873))
-  ############################## CAN WE DELETE?
-  #X_pred <- model.matrix( ~ 1, data = grid)
-
-  # Make a sequence of dates
-  if (start_date == end_date) {
+  model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere",
+                           start_parms = c(42.2746, 2.6493, 0.1902, 2.0873))
+  # Add date column to grid of points
+  if (start_date == end_date)
     grid$date <- start_date
+    # Create prediction matrix
     X_pred <- model.matrix( ~ 1+ date, data = grid)
   } else {
+    # Create sequence of dates from start_date to end_date
     dates <- seq(as.Date(start_date), as.Date(end_date), by = "day")
     # For each date, there should be length(grid) number of rows in X_pred
     ndat <- rep(dates, each = nrow(grid))
+    # Create prediction matrix
     X_pred <- cbind(1,ndat)
   }
 
   locs_pred <- grid[, c("x", "y")]
   preds <- GpGp::predictions(model,locs_pred,X_pred)
   return(preds)
+
 }
 
 

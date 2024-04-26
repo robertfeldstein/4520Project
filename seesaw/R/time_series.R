@@ -30,4 +30,5 @@ time_series_station <- function(id, start_date = 11275, end_date = 19820){
                                  station_data$LST_DATE <= end_date,]
 
   return(station_data)
+
 }
