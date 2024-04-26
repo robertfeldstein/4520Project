@@ -24,6 +24,4 @@ simply the expected temperature on each day of the year.
 }
 \examples{
 yearly_cycle_station("3013")
-
-
 }

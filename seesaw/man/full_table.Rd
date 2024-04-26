@@ -5,10 +5,12 @@
 \alias{full_table}
 \title{NOAA Weather Station data between 2000 and 2024.}
 \format{
-A data frame with 11 columns and 1134352 rows
+A data frame with 13 columns and 1134574 rows
 
 \describe{
 \item{WBANNO}{The unique identifier for each weather station}
+\item{state}{The state in which the weather station is located}
+\item{STATION_NAME}{The name of the weather station}
 \item{LST_DATE}{The date of the weather data}
 \item{CRX_VN}{The version number of the station datalogger program that was in
 effect at the time of the observation. Note: This field should be
