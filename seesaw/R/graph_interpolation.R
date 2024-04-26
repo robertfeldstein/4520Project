@@ -20,7 +20,10 @@
 
 
 graph_interp <- function(preds,grid){
+
+  # Extract x,y coordinates of grid points
   locs_pred <- grid[, c("x", "y")]
+  # Plot interpolation
   ggplot2::ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
                                                    y = locs_pred[,"y"],
                                                    fill = preds)) +
