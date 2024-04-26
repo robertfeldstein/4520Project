@@ -6,7 +6,6 @@ folder_names = seq(2000,2024,length.out=25)
 # A dataset with with one row for each station, providing information about
 # the station identifier, station name, state, longitude, and latitude
 # We will need to load in data from all of the years
-# One row for each station, station identifier (WBANNO)
 # Should be close to 236 rows
 
 # Dictionary for converting state abbreviations to full names
@@ -122,16 +121,6 @@ colnames(station_info) <- c("station_id","station_name","state",
 # Save the data frame as a .RData file
 save(station_info,file="./seesaw/data/station_info.RData")
 
-###################################### START DELETE
-
-# Second Dataset
-# Around 11mb as an .RData file
-# Follow the video to see how to document the datasets
-# Package will have a data directory, the .Rdata files should be in this folder
-# This script, and the true data will not be put into the package
-# Convert missing value codes into NAs. The date column should be in R’s date format. Be sure to
-# document your dataset, explaining what each column means.
- ###################################### END DELETE
 
 # Second Dataset
 # The full daily dataset with the following columns:
