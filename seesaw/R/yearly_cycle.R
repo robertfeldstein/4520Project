@@ -3,7 +3,7 @@
 # return a data frame with row for each day, a column for day number (1-365),
 # and a column for the expected average temperature on each day
 
-yearly_cycle_station <- function(id){
+yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   # Load in files
   load("data/full_table.RData")
   load("data/station_info.RData")
@@ -17,7 +17,8 @@ yearly_cycle_station <- function(id){
   station_data$COS_DOY <- cos(2 * pi * station_data$DOY / 365)
 
   #Perform linear regression
-  lm_fit <- lm(T_DAILY_AVG ~ SIN_DOY + COS_DOY, data = station_data)
+
+  lm_fit <- lm(variable ~ SIN_DOY + COS_DOY, data = station_data)
 
   #Create a data frame with the expected temperature for each day
   expected_temps <- data.frame(DOY = 1:365)

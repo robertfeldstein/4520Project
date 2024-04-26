@@ -72,7 +72,7 @@ attribute_extract <- function(txt_file){
   #Remove all "" elements of words
   words <- words[words != ""]
   # Extract the station identifier
-  station_id = words[1]
+  station_id = as.character(as.numeric(words[1]))
   # Extract the station name
   station_name = strsplit(station_file,split="-")[[1]][3]
   #Remove the ".txt" from station_name
@@ -192,6 +192,17 @@ full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 ## If desired, convert LST_DATE from the number of days since Jan 1, 1970 to a
 ## R Date object
 full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
+
+# Merge full_table with station_info to include state and station_name
+
+full_table <- merge(full_table,station_info,by.x="WBANNO",by.y="station_id",all.x=TRUE)
+
+# Subset and reorder the columns
+
+full_table <- full_table[,c("WBANNO","state","station_name","LST_DATE","CRX_VN",
+              "LONGITUDE","LATITUDE", "T_DAILY_MAX","T_DAILY_MIN","T_DAILY_MEAN",
+              "T_DAILY_AVG", "P_DAILY_CALC","SOLARAD_DAILY")]
+
 
 # Save the data frame as a .RData file
 save(full_table,file="./seesaw/data/full_table.RData")
