@@ -14,10 +14,14 @@
 #'
 #' @examples
 #' grid_usa(100)
+
 usagrid <- function(resolution=200) {
-  # Read in the shapefile from the RDS file
-  shapefile <- readRDS("data/usa_shp.rds")
+
+  # Load in the shapefile from the RData file
+  shapefile <- load("data/usa_shp.RData")
+  # Construct polygon
   multi_polygon <- sf::st_geometry(shapefile)
+
   # Get x and y coordinates of the multi-polygon
   x_coords <- sf::st_coordinates(multi_polygon)[, 1]
   y_coords <- sf::st_coordinates(multi_polygon)[, 2]
@@ -26,14 +30,19 @@ usagrid <- function(resolution=200) {
   x <- seq(min(x_coords), max(x_coords), length.out = resolution)
   y <- seq(min(y_coords), max(y_coords), length.out = resolution)
   grid <- expand.grid(x = x, y = y)
+
+  # Convert grid into an sf object
   grid <- sf::st_as_sf(grid, coords = c("x", "y"), crs = 4269)
   grid <- sf::st_transform(grid, crs = sf::st_crs(shapefile))
+
   # Use sf package to determine the points that intersect the shapefile
   grid$inside <- sf::st_within(grid, shapefile)
   grid$inside <- lengths(grid$inside) > 0
-  # Return the grid points that are in the polygon
+
+  # Keep the grid points that are in the polygon
   grid <- grid[grid$inside, ]
-  # Convert back into a dataframe and reformat
+
+  # Convert sf object back into a dataframe and reformat
   grid_df <- as.data.frame(grid)
   grid_df$coordinates <- sf::st_coordinates(grid_df$geometry)
   grid_df$x <- grid_df$coordinates[, 1]
@@ -45,6 +54,7 @@ usagrid <- function(resolution=200) {
   grid_df <- grid_df[grid_df$x > -125.0 & grid_df$x < -66.93457 & grid_df$y >
                        24.396308 & grid_df$y < 49.384358, ]
   return(grid_df)
+
 }
 
 
