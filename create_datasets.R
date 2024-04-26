@@ -76,7 +76,7 @@ attribute_extract <- function(txt_file){
   #Remove all "" elements of words
   words <- words[words != ""]
   # Extract the station identifier
-  station_id = as.character(as.numeric(words[1]))
+  station_id = as.character(words[1])
   # Extract the station name
   station_name = strsplit(station_file,split="-")[[1]][3]
   #Remove the ".txt" from station_name
@@ -173,8 +173,6 @@ extract_necessary <- function(txt_file){
   return(table)
 }
 
-# Check to make sure the function works
-tab <- extract_necessary("./NOAA_DATA/2012/CRND0103-2012-NC_Asheville_8_SSW.txt")
 
 # Loop through all of the directories and extract the necessary information
 # Combine into one data frame
@@ -206,6 +204,9 @@ full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 # Convert LST_DATE from the number of days since Jan 1, 1970 to a
 # R Date object
 full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
+
+# Convert WBANNO to a character adding leading zero if the length is less than 5
+full_table$WBANNO <- sprintf("%05d",full_table$WBANNO)
 
 # Merge full_table with station_info to include state and station_name
 full_table <- merge(full_table,station_info,by.x="WBANNO",by.y="station_id",all.x=TRUE)
