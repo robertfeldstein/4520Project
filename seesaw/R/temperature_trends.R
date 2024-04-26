@@ -20,17 +20,10 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   load("data/full_table.RData")
   load("data/station_info.RData")
 
-  # Check that the station_id is properly formatted
-  ################################# DO WE ACTUALLY ADD LEADING ZEROS IF NECESSARY (i though that is why we have to find unique station ids)
-  # Add leading zeros if necessary
-  if (!is.null(station_id)) {
-    station_id <- as.character(as.numeric(station_id))
-    full_table <- full_table[full_table$WBANNO %in% station_id, ]
-  }
-
   # Filter the data to include only the dates of interest
   full_table <- full_table[full_table$LST_DATE >= date_start
                            & full_table$LST_DATE <= date_end, ]
+
   # Find the unique station ids
   stations <- unique(full_table$WBANNO)
 
