@@ -70,15 +70,15 @@ attribute_extract <- function(txt_file){
   fn <- as.character(txt_file)
   # Extract just the station portion of the directory
   station_file <- strsplit(fn,split="/")[[1]][4]
-  #Split the line into individual "words"
+  # Split the line into individual "words"
   words <- strsplit(txt,split=" ")[[1]]
-  #Remove all "" elements of words
+  # Remove all "" elements of words
   words <- words[words != ""]
   # Extract the station identifier
   station_id = as.character(words[1])
   # Extract the station name
   station_name = strsplit(station_file,split="-")[[1]][3]
-  #Remove the ".txt" from station_name
+  # Remove the ".txt" from station_name
   station_name <- substr(station_name,1,nchar(station_name)-4)
   # Extract the state
   state_abbreviation <- substr(station_name,1,2)
@@ -136,7 +136,7 @@ save(station_info,file="./seesaw/data/station_info.RData")
 # T_DAILY_MAX, T_DAILY_MIN, T_DAILY_MEAN, T_DAILY_AVG, P_DAILY_CALC,
 # SOLARAD_DAILY
 extract_necessary <- function(txt_file){
-  # Headers
+  # Specify headers
   headers <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
                "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
                "P_DAILY_CALC","SOLARAD_DAILY", "SUR_TEMP_DAILY_TYPE",
@@ -147,6 +147,7 @@ extract_necessary <- function(txt_file){
                "SOIL_MOISTURE_100_DAILY", "SOIL_TEMP_5_DAILY",
                "SOIL_TEMP_10_DAILY", "SOIL_TEMP_20_DAILY",
                "SOIL_TEMP_50_DAILY", "SOIL_TEMP_100_DAILY")
+  # Read in table, set column names
   table <- read.table(txt_file,header=F)
   colnames(table) <- headers
   # Convert the date column to R's date format
@@ -156,8 +157,8 @@ extract_necessary <- function(txt_file){
   table[table == -99] <- NA
 
   #Subset the table to only include the necessary columns
-  table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
-                    "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
+  table <- table[,c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE",
+                    "T_DAILY_MAX", "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
                     "P_DAILY_CALC","SOLARAD_DAILY")]
   return(table)
 }
@@ -165,13 +166,14 @@ extract_necessary <- function(txt_file){
 
 # Loop through all of the directories and extract the necessary information
 # Combine into one data frame
+
+# Initialize empty dataframe, set appropriate column names
 full_table <- data.frame(matrix(ncol=11, nrow=1.25E6))
-colnames(full_table) <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE","T_DAILY_MAX",
-                          "T_DAILY_MIN","T_DAILY_MEAN","T_DAILY_AVG",
-                          "P_DAILY_CALC","SOLARAD_DAILY")
+colnames(full_table) <- c("WBANNO","LST_DATE","CRX_VN","LONGITUDE","LATITUDE",
+                          "T_DAILY_MAX", "T_DAILY_MIN","T_DAILY_MEAN",
+                          "T_DAILY_AVG", "P_DAILY_CALC","SOLARAD_DAILY")
 # Initialize a counter for row index
 row_index <- 1
-
 for (folder in folder_names){
   # Get the list of files in the directory
   files <- list.files(paste0(dir,"/",folder))
@@ -187,6 +189,7 @@ for (folder in folder_names){
     row_index <- row_index + num_rows
   }
 }
+
 #Remove rows with all NAs
 full_table <- full_table[ rowSums(is.na(full_table)) < ncol(full_table), ]
 
@@ -198,7 +201,8 @@ full_table$LST_DATE <- as.Date(full_table$LST_DATE, origin = "1970-01-01")
 full_table$WBANNO <- sprintf("%05d",full_table$WBANNO)
 
 # Merge full_table with station_info to include state and station_name
-full_table <- merge(full_table,station_info,by.x="WBANNO",by.y="station_id",all.x=TRUE)
+full_table <- merge(full_table,station_info,by.x="WBANNO",by.y="station_id",
+                    all.x=TRUE)
 
 # Subset and reorder the columns
 full_table <- full_table[,c("WBANNO","state","station_name","LST_DATE","CRX_VN",
