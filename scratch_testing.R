@@ -6,6 +6,7 @@ devtools::test()
 
 devtools::document()
 
+?usa_shp
 ?time_series_station
 ?usagrid
 ?interpolate_grid
