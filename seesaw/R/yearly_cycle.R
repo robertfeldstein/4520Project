@@ -19,8 +19,13 @@
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 
   # Load in files
-  load("data/full_table.RData")
-  load("data/station_info.RData")
+  full_table_path <- system.file("data", "full_table.RData", package = "seesaw")
+  station_info_path <- system.file("data", "station_info.RData", package = "seesaw")
+  # Load the data file
+  full_table <- load(full_table_path)
+  station_info <- load(station_info_path)
+  #load("data/full_table.RData")
+  #load("data/station_info.RData")
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]
