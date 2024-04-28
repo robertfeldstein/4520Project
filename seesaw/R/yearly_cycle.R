@@ -38,7 +38,8 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 
   #Create a data frame with the expected temperature for each day
   expected_temps <- data.frame(DOY = 1:365)
-  expected_temps$Expected_AVG_T <- lm_fit$coefficients[1] +
+  variable_name <- paste0("Expected_", variable)
+  expected_temps[, variable_name] <- lm_fit$coefficients[1] +
     lm_fit$coefficients[2] * sin(2 * pi * expected_temps$DOY / 365) +
     lm_fit$coefficients[3] * cos(2 * pi * expected_temps$DOY / 365)
 
