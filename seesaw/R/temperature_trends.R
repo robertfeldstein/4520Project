@@ -15,10 +15,14 @@
 #' trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
 
 trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
-                           date_end = "2020-12-31"){
+                           date_end = "2024-12-31"){
   # Load in files
-  load("data/full_table.RData")
-  load("data/station_info.RData")
+  # Load in files
+  full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
+  station_info_path <- system.file("Data", "station_info.RData", package = "seesaw")
+  # Load the data file
+  load(full_table_path)
+  load(station_info_path)
 
   # Filter the data to include only the dates of interest
   full_table <- full_table[full_table$LST_DATE >= date_start
