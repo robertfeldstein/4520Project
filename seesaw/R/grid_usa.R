@@ -36,10 +36,10 @@ usagrid <- function(resolution=200) {
 
   # Convert grid into an sf object
   grid <- sf::st_as_sf(grid, coords = c("x", "y"), crs = 4269)
-  grid <- sf::st_transform(grid, crs = sf::st_crs(shapefile))
+  grid <- sf::st_transform(grid, crs = sf::st_crs(shp_file))
 
   # Use sf package to determine the points that intersect the shapefile
-  grid$inside <- sf::st_within(grid, shapefile)
+  grid$inside <- sf::st_within(grid, shp_file)
   grid$inside <- lengths(grid$inside) > 0
 
   # Keep the grid points that are in the polygon
