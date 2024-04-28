@@ -18,7 +18,7 @@
 usagrid <- function(resolution=200) {
 
   # Load in the shapefile from the RData file
-  shapefile <- load("data/usa_shp.RData")
+  shapefile <- load("data/shp_file.RData")
   # Construct polygon
   multi_polygon <- sf::st_geometry(shapefile)
 

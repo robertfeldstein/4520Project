@@ -5,7 +5,7 @@ devtools::load_all("./")
 devtools::test()
 
 devtools::document()
-
+export(usa_shp)
 ?usa_shp
 ?time_series_station
 ?usagrid
@@ -60,9 +60,9 @@ ggplot(data = cycle, aes(x = DOY, y = Expected_AVG_T)) +
   labs(title = "Yearly Cycle of T_DAILY_AVG at Station 53878") +
   theme(plot.title = element_text(hjust = 0.5))
 
-library(sf)
-# Load shp file
-shp_file <- st_read("./usa_shp/")
-# Save shp_file as an RData file
-save(shp_file, file = "./data/usa_shp.RData")
-all.equal(shp_file, old_shp_file)
+# library(sf)
+# # Load shp file
+# shp_file <- st_read("./usa_shp/")
+# # Save shp_file as an RData file
+# save(shp_file, file = "./data/shp_file.RData")
+# all.equal(shp_file, old_shp_file)
