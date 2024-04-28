@@ -14,16 +14,16 @@
 #' year.
 #'
 #' @examples
-#' yearly_cycle_station("3013")
+#' yearly_cycle_station("03013")
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 
   # Load in files
-  full_table_path <- system.file("data", "full_table.RData", package = "seesaw")
-  station_info_path <- system.file("data", "station_info.RData", package = "seesaw")
+  full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
+  station_info_path <- system.file("Data", "station_info.RData", package = "seesaw")
   # Load the data file
-  full_table <- load(full_table_path)
-  station_info <- load(station_info_path)
+  load(full_table_path)
+  load(station_info_path)
   #load("data/full_table.RData")
   #load("data/station_info.RData")
 
@@ -51,8 +51,6 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   return(expected_temps)
 
 }
-
-
 
 
 
