@@ -7,8 +7,12 @@ test_that( "interpolate_grid looks okay", {
                               var = "T_DAILY_AVG",
                               resolution = 200)
 
-  ### WHAT OUTPUT DO WE EXPECT HERE? LIKE DO WE KNOW HOW MANY POINTS THERE WILL
-  ### BE?
+  # Check to make sure that the lenght of interpolation vector is equal to
+  # number of rows in grid with same resolution
+  expect_equal(
+    nrow( usagrid(200) ),
+    length(interp1)
+  )
 
   # Test 2: Interpolation of default variable (T_DAILY_AVG) in 2008,
   #         with default resolution (200)
@@ -17,8 +21,8 @@ test_that( "interpolate_grid looks okay", {
 
   # Check to make sure that defaults are functioning as expected
   expect_equal(
-    interp1,
-    interp2
+    length(interp1),
+    length(interp2)
   )
 
   # Test 3: Interpolation of different variable, different resolution
@@ -28,6 +32,13 @@ test_that( "interpolate_grid looks okay", {
                               end_date = "2022-08-31",
                               var = variable,
                               resolution = res)
+
+  # Check to make sure that the lenght of interpolation vector is equal to
+  # number of rows in grid with same resolution
+  expect_equal(
+    nrow( usagrid(res) ),
+    length(interp3)
+  )
 
 
 } )
