@@ -1,0 +1,40 @@
+---
+title: "seesaw"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{seesaw}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(seesaw)
+library(ggplot2)
+library(sf)
+```
+
+### Load the Data
+
+```{r}
+# Get file paths
+full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
+station_info_path <- system.file("Data", "station_info.RData", package = 
+                                   "seesaw")
+# Load the data file
+load(full_table_path)
+load(station_info_path)
+```
+
+
+1. Make a map of the average temperature at each station for the month of March 
+2024.
+
+
+

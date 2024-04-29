@@ -5,6 +5,7 @@ devtools::load_all("./")
 devtools::test()
 
 devtools::document()
+
 export(usa_shp)
 ?usa_shp
 ?time_series_station
@@ -66,3 +67,5 @@ ggplot(data = cycle, aes(x = DOY, y = Expected_AVG_T)) +
 # # Save shp_file as an RData file
 # save(shp_file, file = "./data/shp_file.RData")
 # all.equal(shp_file, old_shp_file)
+
+usethis::use_vignette("seesaw")
