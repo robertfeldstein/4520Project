@@ -27,14 +27,77 @@ library(sf)
 full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
 station_info_path <- system.file("Data", "station_info.RData", package = 
                                    "seesaw")
+shp_file_path <- system.file("Data", "shp_file.Rdata", package = "seesaw")
+
 # Load the data file
 load(full_table_path)
 load(station_info_path)
+load(shp_file_path)
 ```
 
 
 1. Make a map of the average temperature at each station for the month of March 
 2024.
+
+```{r}
+# Get list of station ids 
+station_ids <- station_info$station_id
+
+# Use time_series_station to filter the data to March 2024 for each station
+# Initialize empty vector to hold average temperatures
+average_temps <- numeric(length(station_ids))
+
+# # Loop through each station
+# for (i in 1:length(station_ids)){
+#   time_series <- time_series_station(station_ids[i], "2024-03-01", "2024-03-31")
+#   average_temps[i] <- mean(time_series$T_DAILY_AVG, na.rm = TRUE)
+# }
+
+march_data <- full_table[full_table$LST_DATE >= "2024-03-01" & full_table$LST_DATE <= "2024-03-31",]
+average_temps <- aggregate(march_data$T_DAILY_AVG,by=list(march_data$WBANNO),FUN=mean)
+
+# Create a new data frame with station ids, average temperatures,lat and lon
+
+df <- data.frame(station_id = unique(march_data$WBANNO), average_temp = average_temps)
+# Merge df with station_info to get lat and lon
+df <- merge(df, station_info, by.x = "station_id", by.y = "station_id")
+
+#Drop na
+df <- df[complete.cases(df),]
+
+# Plot the shapefile and add the average temperature data as points
+usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
+                    ymin = 22.396308, ymax = 49.384358)
+
+df_sf <- st_as_sf(df, coords = c("x", "y"), crs = st_crs(usa_boundary))
+coordinates <- st_coordinates(df_sf)
+df_sf$x <- coordinates[,1]
+df_sf$y <- coordinates[,2]
+
+# Plot the shapefile and add the average temperature data as points
+ggplot() +
+  geom_sf(data = usa_boundary) +
+  coord_sf(lims_method = "geometry_bbox") +
+  geom_point(data = df_sf, aes(color = average_temp, x = x, y = y), size = 1) +
+  theme_minimal() +
+  labs(title = "Average Temperature at Each Station for March 2024") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+```
+
+2. Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider
+including elevation in your model.
+
+```{r}
+
+res <- 100
+spatial_model <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
+grid <- usagrid(res)
+graph_interp(spatial_model, grid)
+
+
+```
 
 
 

@@ -30,10 +30,13 @@ usagrid <- function(resolution=50) {
   y_coords <- sf::st_coordinates(multi_polygon)[, 2]
   
   # Subset the coordinates to only include the contiguous United States
-  x_coords <- x_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
-                        24.396308 & y_coords < 49.384358]
-  y_coords <- y_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
-                        24.396308 & y_coords < 49.384358]
+  subset_indices <- x_coords > -125.0 & x_coords < -66.93457 & y_coords > 22.396308 & y_coords < 49.384358
+  x_coords <- x_coords[subset_indices]
+  y_coords <- y_coords[subset_indices]
+  # x_coords <- x_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
+  #                       24.396308 & y_coords < 49.384358]
+  # y_coords <- y_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
+  #                       24.396308 & y_coords < 49.384358]
 
   # Create a grid of points within the bounding box of the multi-polygon
   x <- seq(min(x_coords), max(x_coords), length.out = resolution)
