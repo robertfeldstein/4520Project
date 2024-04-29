@@ -32,7 +32,6 @@ interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
   # Load the data file
   load(full_table_path)
 
-
   # Create a grid of points within the contiguous USA
   grid <- usagrid(resolution)
 

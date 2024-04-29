@@ -57,4 +57,5 @@ test_that( "yearly_cycle_station looks okay", {
     nrow(cycle3)
   )
 
+
 } )

@@ -1,5 +1,5 @@
 
-testthat( "usagrid looks okay", {
+test_that( "usagrid looks okay", {
 
 
 

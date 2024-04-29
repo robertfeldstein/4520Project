@@ -17,7 +17,6 @@
 trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
                            date_end = "2024-12-31"){
   # Load in files
-  # Load in files
   full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
   station_info_path <- system.file("Data", "station_info.RData", package = "seesaw")
   # Load the data file
@@ -28,8 +27,13 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   full_table <- full_table[full_table$LST_DATE >= date_start
                            & full_table$LST_DATE <= date_end, ]
 
+  # Subset the data to include only the stations of interest
+  if ( !is.null(station_id) ){
+    full_table <- full_table[full_table$WBANNO == station_id, ]
+  }
+
   # Find the unique station ids
-  stations <- unique(full_table$WBANNO)
+  stations <- unique(full_table$station_name)
 
   # Add a day and month column to the the data frame
   full_table$DAY <- as.numeric(format(full_table$LST_DATE, "%d"))
