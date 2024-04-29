@@ -51,4 +51,7 @@ NOAA_DATA/*
 # .DS_Store
 **/.DS_Store
 
+# Rpoject
+*.Rproj
+
 
