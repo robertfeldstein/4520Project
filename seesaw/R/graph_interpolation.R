@@ -24,15 +24,15 @@ graph_interp <- function(preds,grid){
   # Extract x,y coordinates of grid points
   locs_pred <- grid[, c("x", "y")]
   # Plot interpolation
-  ggplot2::ggplot(data = as.data.frame(preds), aes(x = locs_pred[,"x"],
+  ggplot2::ggplot(data = as.data.frame(preds), ggplot2::aes(x = locs_pred[,"x"],
                                                    y = locs_pred[,"y"],
                                                    fill = preds)) +
-    geom_tile() +
-    scale_fill_viridis_c() +
-    coord_quickmap() +
-    theme_minimal() +
-    theme(legend.position = "bottom") +
-    labs(title = "Interpolated T_DAILY_AVG values")
+    ggplot2::geom_tile() +
+    ggplot2::scale_fill_viridis_c() +
+    ggplot2::coord_quickmap() +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
+    ggplot2::labs(title = "Interpolated T_DAILY_AVG values")
 }
 
 

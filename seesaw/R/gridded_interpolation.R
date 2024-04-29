@@ -46,7 +46,8 @@ interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
   X <- model.matrix( ~ full_table$LST_DATE, data = full_table)
   # Fit the Gaussian process model
   model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere",
-                           start_parms = c(42.2746, 2.6493, 0.1902, 2.0873))
+                           start_parms = c(42.2746, 2.6493, 0.1902, 2.0873), 
+                           silent = T)
   # Add date column to grid of points
   if (start_date == end_date){
     grid$date <- start_date

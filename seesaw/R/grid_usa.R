@@ -15,7 +15,7 @@
 #' @examples
 #' grid_usa(100)
 
-usagrid <- function(resolution=200) {
+usagrid <- function(resolution=50) {
 
   # Load in the shapefile from the RData file
   shp_file_path <- system.file("Data", "shp_file.RData", package = "seesaw")
@@ -28,6 +28,12 @@ usagrid <- function(resolution=200) {
   # Get x and y coordinates of the multi-polygon
   x_coords <- sf::st_coordinates(multi_polygon)[, 1]
   y_coords <- sf::st_coordinates(multi_polygon)[, 2]
+  
+  # Subset the coordinates to only include the contiguous United States
+  x_coords <- x_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
+                        24.396308 & y_coords < 49.384358]
+  y_coords <- y_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
+                        24.396308 & y_coords < 49.384358]
 
   # Create a grid of points within the bounding box of the multi-polygon
   x <- seq(min(x_coords), max(x_coords), length.out = resolution)
@@ -54,9 +60,12 @@ usagrid <- function(resolution=200) {
 
   # Filter out the points that are not in the United States bounding box
   # Here we are removing Alaska, Hawaii, and the territories
-  grid_df <- grid_df[grid_df$x > -125.0 & grid_df$x < -66.93457 & grid_df$y >
-                       24.396308 & grid_df$y < 49.384358, ]
+  # grid_df <- grid_df[grid_df$x > -125.0 & grid_df$x < -66.93457 & grid_df$y >
+  #                      24.396308 & grid_df$y < 49.384358, ]
   return(grid_df)
 
 }
+
+
+
 
