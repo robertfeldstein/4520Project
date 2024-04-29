@@ -20,13 +20,15 @@ test_that( "trend_of_temps looks okay", {
     names(trend1)
   )
 
+
   # Test 2: Temperature trends for a specific station, all dates
   station1 <- "22016"
   trend2 <- trend_of_temps(station1)
 
   # Check to make sure that only station of interest is included
   expect_equal(
-
+    station1,
+    unique( trend2$station_id )
   )
 
   # Check to make sure that the names of the columns are correct
@@ -36,6 +38,7 @@ test_that( "trend_of_temps looks okay", {
     names(trend1)
   )
 
+
   # Test 3: Temperature trends for a specific station, specific dates
   station2 <- "94084"
   start1 <- "2002-09-28"
@@ -43,9 +46,10 @@ test_that( "trend_of_temps looks okay", {
   trend3 <- trend_of_temps(station2, start1, end1)
 
   # Check to make sure that only station of interest is included
-
-  # Check to make sure that only desired dates are included
-  #  IS IT WORTH IT TO MAKE SURE MEANS ARE NOT THE SAME IF DIFF DATES
+  expect_equal(
+    station2,
+    unique( trend3$station_id )
+  )
 
   # Check to make sure that the names of the columns are correct
   columns <- c("station_id", middle.columns, "mean")

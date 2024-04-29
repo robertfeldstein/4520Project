@@ -26,15 +26,15 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   # Filter the data to include only the dates of interest
   full_table <- full_table[full_table$LST_DATE >= date_start
                            & full_table$LST_DATE <= date_end, ]
-  
+
   # Subset the data to include only the stations of interest
   if ( !is.null(station_id) ){
-    full_table <- full_table[full_table$WBANNO == station_id, ]
+    station_info <- station_info[station_info$station_id == station_id, ]
   }
 
   # Find the unique station ids
-  stations <- unique(full_table$WBANNO)
-  
+  stations <- station_info$station_id
+
 
   # Add a day and month column to the the data frame
   full_table$DAY <- as.numeric(format(full_table$LST_DATE, "%d"))
