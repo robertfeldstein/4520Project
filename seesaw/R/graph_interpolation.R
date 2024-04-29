@@ -32,7 +32,9 @@ graph_interp <- function(preds,grid){
     ggplot2::coord_quickmap() +
     ggplot2::theme_minimal() +
     ggplot2::theme(legend.position = "bottom") +
-    ggplot2::labs(title = "Interpolated T_DAILY_AVG values")
+    ggplot2::labs(title = "Interpolated T_DAILY_AVG values",
+                  x = "Longitude",
+                  y = "Latitude")
 }
 
 
