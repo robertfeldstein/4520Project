@@ -89,8 +89,7 @@ including elevation in your model.
 res <- 100
 spatial_model <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
 grid <- usagrid(res)
-graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", 
-                                         fill = "Interpolated Average Temperature")
+graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", fill = "Interpolated Average Temperature")
 
 
 ```
@@ -122,7 +121,7 @@ for (i in 1:length(station_ids)){
 # Plot the shapefile and add the warmest day data as points
 df_warmest <- merge(warmest_coldest_days, station_info, by.x = "station_id", by.y = "station_id")
 
-# Drop na
+# Drop NA
 #df_warmest <- df_warmest[complete.cases(df_warmest),]
 
 df_warmest_sf <- st_as_sf(df_warmest, coords = c("longitude", "latitude"), crs = 
@@ -194,15 +193,31 @@ Assumptions:
 4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a diversity of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
 
 ```{r}
-stations <- c()
-plot.new()
-for (station in stations){
-  cycle <- yearly_cycle_station(station)
-  
-}
+
+# Select 10 stations from around the contiguous USA
+# ( Maine, Washington, Arizona, Wyoming, Oklahoma, Texas, Kentucky, Florida, 
+#   Michigan, Pennsylvania )
+stations <- c("94645", "04223", "53169", "04131", "53182", "12987", "63849", 
+              "92826", "54810", "03761")
+# Select 10 colors
 cols <- c("chartreuse1", "darkcyan", "dodgerblue4", "goldenrod1", "darkorange1",
           "deeppink3", "green4", "mediumpurple", "midnightblue", "firebrick3")
-
+# Initialize plot
+plt <- ggplot() + 
+  labs(title = "Estimated Yearly Cycles", 
+       x = "DOY", y = "Expected_T_DAILY_AVG")
+# Calculate and plot estimated yearly cycle for each station
+for (i in 1:10){
+  cycle <- yearly_cycle_station(stations[i])
+  cycle$station <- stations[i]
+  plt <- plt + geom_line(data = cycle, 
+                           aes(x = DOY, y = Expected_T_DAILY_AVG,
+                               color = station))
+}
+# Add legend
+plt <- plt + scale_color_manual(name = "Station ID", breaks = stations, 
+                                values = setNames(cols, stations))
+plt
 ```
 
 5. Estimate the trend over the years for each station, in units of degrees Fahrenheit per year, and plot the trend values on a map. Indicate visually on your map which of the trends are statistically significant.
@@ -212,7 +227,48 @@ In your report, write the statistical model that you used in mathematical notati
 Interpolate the estimated trends to a grid, and plot them on a map. For the interpolations, you may consider using only the trend estimates whose standard errors are sufficiently small. 
 
 ```{r}
+# Find the temperature trends for each station (since 2000)
+temp_trends <- trend_of_temps()
 
+# Create a new data frame with station ids, temperature trend, lat and long
+station_trends <- data.frame(station_id = temp_trends$station_id, 
+                             trend = temp_trends$trend_Overall)
+# Merge df with station_info to get lat and lon
+station_trends <- merge(station_trends, station_info, by.x = "station_id", 
+                        by.y = "station_id")
+
+# Determine which trends are statistically significant
+station_trends$signif
+
+# Drop NAs
+station_trends <- station_trends[complete.cases(station_trends), ]
+
+# Plot the USA shapefile
+usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
+                    ymin = 22.396308, ymax = 49.384358)
+
+station_trends_sf <- st_as_sf(station_trends, 
+                              coords = c("longitude", "latitude"), 
+                              crs = st_crs(usa_boundary))
+coordinates <- st_coordinates(station_trends_sf)
+station_trends_sf$x <- coordinates[,1]
+station_trends_sf$y <- coordinates[,2]
+
+# Plot overall trends
+ggplot() +
+  geom_sf(data = usa_boundary) +
+  coord_sf(lims_method = "geometry_bbox") +
+  geom_point(data = station_trends_sf, 
+             aes(color = trend, x = x, y = y, shape = signif), 
+             size = 1) + theme_minimal() +
+  labs(title = "Temperature Trends Since 2000", 
+       x = "Longitude", y = "Latitude") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+```
+```{r}
+# Interpolate trends for contigous US
 ```
 
 6. Find a reputable source for the average temperature trend in the contiguous USA over the past 20 years, and compare your results to the source's.

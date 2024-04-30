@@ -48,7 +48,7 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
               "August", "September", "October", "November", "December")
   for (month in months){
     # Create name vector
-    namevector <- paste0(month, "_slope")
+    namevector <- paste0("trend_", month)
     # Initialize a column (name vector) to hold slope coefficients for month
     slope_coefs[,namevector] <- NA
   }
@@ -82,7 +82,7 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
     slope_coefs[station, 2:13] <- station_slopes
   }
   # Find average slope coefficient for each station
-  slope_coefs$mean <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
+  slope_coefs$trend_Overall <- rowMeans(slope_coefs[,2:13], na.rm = TRUE)
 
   return(slope_coefs)
 

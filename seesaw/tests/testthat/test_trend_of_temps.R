@@ -13,8 +13,8 @@ test_that( "trend_of_temps looks okay", {
   # Check to make sure that the names of the columns are correct
   months <- c("January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December")
-  middle.columns <- paste0(months, "_slope")
-  columns <- c("station_id", middle.columns, "mean")
+  middle.columns <- paste0("trend_", months)
+  columns <- c("station_id", middle.columns, "trend_Overall")
   expect_equal(
     columns,
     names(trend1)
@@ -32,7 +32,7 @@ test_that( "trend_of_temps looks okay", {
   )
 
   # Check to make sure that the names of the columns are correct
-  columns <- c("station_id", middle.columns, "mean")
+  columns <- c("station_id", middle.columns, "trend_Overall")
   expect_equal(
     columns,
     names(trend1)
@@ -52,7 +52,7 @@ test_that( "trend_of_temps looks okay", {
   )
 
   # Check to make sure that the names of the columns are correct
-  columns <- c("station_id", middle.columns, "mean")
+  columns <- c("station_id", middle.columns, "trend_Overall")
   expect_equal(
     columns,
     names(trend1)
