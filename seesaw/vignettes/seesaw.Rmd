@@ -44,29 +44,23 @@ load(shp_file_path)
 # Get list of station ids 
 station_ids <- station_info$station_id
 
-# Use time_series_station to filter the data to March 2024 for each station
-# Initialize empty vector to hold average temperatures
-average_temps <- numeric(length(station_ids))
-
-# # Loop through each station
-# for (i in 1:length(station_ids)){
-#   time_series <- time_series_station(station_ids[i], "2024-03-01", "2024-03-31")
-#   average_temps[i] <- mean(time_series$T_DAILY_AVG, na.rm = TRUE)
-# }
-
-march_data <- full_table[full_table$LST_DATE >= "2024-03-01" & full_table$LST_DATE <= "2024-03-31",]
-average_temps <- aggregate(march_data$T_DAILY_AVG,by=list(march_data$WBANNO),FUN=mean)
+# Filter data to include only March 2024, find average March 2024 temperature for each station
+march_data <- full_table[full_table$LST_DATE >= "2024-03-01" 
+                         & full_table$LST_DATE <= "2024-03-31", ]
+average_temps <- aggregate(march_data$T_DAILY_AVG,
+                           by = list( march_data$WBANNO ),
+                           FUN = mean )
 
 # Create a new data frame with station ids, average temperatures,lat and lon
-
-df <- data.frame(station_id = unique(march_data$WBANNO), av_temp = average_temps$x)
+df <- data.frame(station_id = unique(march_data$WBANNO), 
+                 average_temp = average_temps$x)
 # Merge df with station_info to get lat and lon
 df <- merge(df, station_info, by.x = "station_id", by.y = "station_id")
 
-#Drop na
-df <- df[complete.cases(df),]
+# Drop NAs
+df <- df[complete.cases(df), ]
 
-# Plot the shapefile and add the average temperature data as points
+# Plot the USA shapefile and add the average temperature data as points
 usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
                     ymin = 22.396308, ymax = 49.384358)
 
@@ -76,13 +70,12 @@ coordinates <- st_coordinates(df_sf)
 df_sf$x <- coordinates[,1]
 df_sf$y <- coordinates[,2]
 
-# Plot the shapefile and add the average temperature data as points
 ggplot() +
   geom_sf(data = usa_boundary) +
   coord_sf(lims_method = "geometry_bbox") +
-  geom_point(data = df_sf, aes(color = av_temp, x = x, y = y), size = 1) +
+  geom_point(data = df_sf, aes(color = average_temp, x = x, y = y), size = 1) +
   theme_minimal() +
-  labs(title = "Average Temperature at Each Station for March 2024") +
+  labs(title = "Average Temperature at Each Station for March 2024", x = "Longitude", y = "Latitude") +
   theme(plot.title = element_text(hjust = 0.5))
   
 
@@ -96,7 +89,8 @@ including elevation in your model.
 res <- 100
 spatial_model <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
 grid <- usagrid(res)
-graph_interp(spatial_model, grid)
+graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", 
+                                         fill = "Interpolated Average Temperature")
 
 
 ```
@@ -200,6 +194,14 @@ Assumptions:
 4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a diversity of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
 
 ```{r}
+stations <- c()
+plot.new()
+for (station in stations){
+  cycle <- yearly_cycle_station(station)
+  
+}
+cols <- c("chartreuse1", "darkcyan", "dodgerblue4", "goldenrod1", "darkorange1",
+          "deeppink3", "green4", "mediumpurple", "midnightblue", "firebrick3")
 
 ```
 
