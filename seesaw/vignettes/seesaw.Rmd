@@ -100,5 +100,33 @@ graph_interp(spatial_model, grid)
 
 ```
 
+3. Estimate the warmest and coldest day of the year for each station, and plot those days on two maps.Think carefully about how to represent the days numerically. 
+
+In your report, describe the statistical analsysi that you used for estimating the warmest and coldest days at each station, including writing down any statistical models in mathematical notation. Be sure to define all your symbols and assumptions. 
+
+Interpolate mpas of the warmest and coldest days, and plot the interpolated maps of warmest and coldest days. 
+
+```{r}
+
+```
+
+
+4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a dvierstiy of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
+
+```{r}
+
+```
+
+5. Estimate the trend over the years for each station, in units of degrees Fahrenheit per year, and plot the trend values on a map. Indicate visually on your map which of the trends are statistically significant.
+
+In your report, write the statistical model that you used in mathematical notation. Be sure to define all your symbols and assumptions.
+
+Interpolate the estimated trends to a grid, and plot them on a map. For the interpolations, you may consider using only the trend estimates whose standard errors are sufficiently small. 
+
+```{r}
+
+```
+
+6. Find a reputable source for the average temperature trend in the contiguous USA over the past 20 years, and compare your results to the source's.
 
 
