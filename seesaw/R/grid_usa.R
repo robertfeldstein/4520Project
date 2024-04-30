@@ -19,12 +19,7 @@
 
 usagrid <- function(resolution=50) {
 
-  # Load in the shapefile from the RData file
-  shp_file_path <- system.file("Data", "shp_file.RData", package = "seesaw")
-  # Load the data file
-  load(shp_file_path)
-  #shapefile <- load("data/shp_file.RData")
-  # Construct polygon
+  data("shp_file", package = "seesaw")
   multi_polygon <- sf::st_geometry(shp_file)
 
   # Get x and y coordinates of the multi-polygon

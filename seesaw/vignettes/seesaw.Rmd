@@ -3,7 +3,7 @@ title: "seesaw"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{seesaw}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{rmarkdown::render}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -92,9 +92,9 @@ including elevation in your model.
 ```{r}
 
 res <- 100
-spatial_model <- seesaw::interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
+spatial_model <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
 grid <- usagrid(res)
-seesaw::graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", fill = "Interpolated Average Temperature")
+graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", fill = "Interpolated Average Temperature")
 
 
 ```

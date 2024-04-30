@@ -19,15 +19,10 @@
 #' @export
 
 time_series_station <- function(id, start_date = 11275, end_date = 19820){
-
-  # Get File Paths
-  full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
-  station_info_path <- system.file("Data", "station_info.RData", package =
-                                     "seesaw")
-
-  # Load the data files
-  load(full_table_path)
-  load(station_info_path)
+  
+  # Load tables
+  data("full_table", package = "seesaw")
+  data("station_info", package = "seesaw")
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]

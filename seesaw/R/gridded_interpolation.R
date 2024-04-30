@@ -29,10 +29,8 @@
 
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
                              resolution = 200){
-  # Load in files
-  full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
-  # Load the data file
-  load(full_table_path)
+  # Load in the full_table
+  data("full_table", package = "seesaw")
 
   # Create a grid of points within the contiguous USA
   grid <- usagrid(resolution)
