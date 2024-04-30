@@ -203,6 +203,8 @@ graph_interp(cold_pred, grid)
 #   Michigan, Pennsylvania )
 stations <- c("94645", "04223", "53169", "04131", "53182", "12987", "63849", 
               "92826", "54810", "03761")
+names <- c("Maine", "Washington", "Arizona", "Wyoming", "Oklahoma", "Texas", 
+           "Kentucky", "Florida", "Michigan", "Pennsylvania")
 # Select 10 colors
 cols <- c("chartreuse1", "darkcyan", "dodgerblue4", "goldenrod1", "darkorange1",
           "deeppink3", "green4", "mediumpurple", "midnightblue", "firebrick3")
