@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(seesaw)
 library(ggplot2)
 library(sf)
+library(GpGp)
 ```
 
 ### Load the Data
@@ -174,6 +175,24 @@ Assumptions:
 
 ```{r}
 # Interpolate maps of the warmest and coldest days
+
+# BUGGED ASK AVA FOR HELP
+
+# y_warm <- df_warmest$warmest_day
+# y_cold <- df_warmest$coldest_day
+# locs <- df_warmest[, c("longitude", "latitude")]
+# grid <- usagrid(100)
+# debug(fit_model)
+# warm_model <- fit_model(y_warm,locs, covfun_name = "matern_sphere",
+#                            silent = T)
+# cold_model <- fit_model(y_cold,locs, covfun_name = "matern_sphere",
+#                            silent = T)
+# 
+# Xpred <- model.matrix( ~ 1, data = grid)
+# pred_locs <- grid[, c("x", "y")]
+# 
+# warm_pred <- predictions(warm_model,pred_locs, Xpred)
+# cold_pred <- predictions(cold_model,pred_locs, Xpred)
 
 ```
 
