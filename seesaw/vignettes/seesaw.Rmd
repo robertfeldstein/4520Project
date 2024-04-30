@@ -58,7 +58,7 @@ average_temps <- aggregate(march_data$T_DAILY_AVG,by=list(march_data$WBANNO),FUN
 
 # Create a new data frame with station ids, average temperatures,lat and lon
 
-df <- data.frame(station_id = unique(march_data$WBANNO), average_temp = average_temps)
+df <- data.frame(station_id = unique(march_data$WBANNO), av_temp = average_temps$x)
 # Merge df with station_info to get lat and lon
 df <- merge(df, station_info, by.x = "station_id", by.y = "station_id")
 
@@ -69,7 +69,8 @@ df <- df[complete.cases(df),]
 usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
                     ymin = 22.396308, ymax = 49.384358)
 
-df_sf <- st_as_sf(df, coords = c("x", "y"), crs = st_crs(usa_boundary))
+df_sf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 
+                    st_crs(usa_boundary))
 coordinates <- st_coordinates(df_sf)
 df_sf$x <- coordinates[,1]
 df_sf$y <- coordinates[,2]
@@ -78,7 +79,7 @@ df_sf$y <- coordinates[,2]
 ggplot() +
   geom_sf(data = usa_boundary) +
   coord_sf(lims_method = "geometry_bbox") +
-  geom_point(data = df_sf, aes(color = average_temp, x = x, y = y), size = 1) +
+  geom_point(data = df_sf, aes(color = av_temp, x = x, y = y), size = 1) +
   theme_minimal() +
   labs(title = "Average Temperature at Each Station for March 2024") +
   theme(plot.title = element_text(hjust = 0.5))
