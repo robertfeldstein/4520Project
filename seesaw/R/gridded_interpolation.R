@@ -24,6 +24,8 @@
 #'
 #' @examples
 #' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
+#' 
+#' @export
 
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
                              resolution = 200){

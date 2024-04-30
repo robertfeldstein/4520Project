@@ -14,6 +14,8 @@
 #'
 #' @examples
 #' grid_usa(100)
+#' 
+#' @export
 
 usagrid <- function(resolution=50) {
 

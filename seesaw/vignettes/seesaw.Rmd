@@ -25,15 +25,20 @@ library(GpGp)
 
 ```{r}
 # Get file paths
-full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
-station_info_path <- system.file("Data", "station_info.RData", package = 
-                                   "seesaw")
-shp_file_path <- system.file("Data", "shp_file.Rdata", package = "seesaw")
+# full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
+# station_info_path <- system.file("Data", "station_info.RData", package = 
+#                                    "seesaw")
+# shp_file_path <- system.file("Data", "shp_file.Rdata", package = "seesaw")
+# 
+# # Load the data file
+# load(full_table_path)
+# load(station_info_path)
+# load(shp_file_path)
 
-# Load the data file
-load(full_table_path)
-load(station_info_path)
-load(shp_file_path)
+data("full_table", package = "seesaw")
+data("station_info", package = "seesaw")
+data("shp_file", package = "seesaw")
+
 ```
 
 
@@ -87,9 +92,9 @@ including elevation in your model.
 ```{r}
 
 res <- 100
-spatial_model <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
+spatial_model <- seesaw::interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", res)
 grid <- usagrid(res)
-graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", fill = "Interpolated Average Temperature")
+seesaw::graph_interp(spatial_model, grid) + labs(x = "Longitude", y = "Latitude", fill = "Interpolated Average Temperature")
 
 
 ```

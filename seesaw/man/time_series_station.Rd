@@ -27,4 +27,5 @@ years 2000 and 2024.
 \examples{
 Durham, NC
 time_series_station(54794, "2000-01-01", "2010-12-31")
+
 }

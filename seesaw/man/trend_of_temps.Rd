@@ -33,4 +33,5 @@ in units of degrees Celsius per year.
 }
 \examples{
 trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
+
 }

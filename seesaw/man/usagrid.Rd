@@ -22,4 +22,5 @@ the territories.
 }
 \examples{
 grid_usa(100)
+
 }

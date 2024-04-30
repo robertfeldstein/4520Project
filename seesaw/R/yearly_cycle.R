@@ -15,6 +15,8 @@
 #'
 #' @examples
 #' yearly_cycle_station("03013")
+#' 
+#' @export
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 

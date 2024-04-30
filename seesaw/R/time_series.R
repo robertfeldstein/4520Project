@@ -15,6 +15,8 @@
 #' @examples
 #' Durham, NC
 #' time_series_station(54794, "2000-01-01", "2010-12-31")
+#' 
+#' @export
 
 time_series_station <- function(id, start_date = 11275, end_date = 19820){
 

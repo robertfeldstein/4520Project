@@ -13,6 +13,8 @@
 #' in the dataframe stores the mean of the monthly slopes.
 #' @examples
 #' trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
+#' 
+#' @export
 
 trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
                            date_end = "2024-12-31"){

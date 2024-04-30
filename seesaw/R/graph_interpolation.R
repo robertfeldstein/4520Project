@@ -17,6 +17,8 @@
 #' @examples
 #' preds <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
 #' graph_interp(preds, 200)
+#'
+#' @export
 
 
 graph_interp <- function(preds,grid){
