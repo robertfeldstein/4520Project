@@ -23,5 +23,5 @@ A function for estimating the yearly cycle for one station. A yearly cycle is
 simply the expected temperature on each day of the year.
 }
 \examples{
-yearly_cycle_station("3013")
+yearly_cycle_station("03013")
 }

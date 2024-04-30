@@ -5,8 +5,7 @@
 \alias{shp_file}
 \title{A shp file in sf format containing the boundaries of the entire United States.}
 \format{
-sf
-
+RData
 \describe{
  \item{AFFGEOID}{American FactFinder Geographic Identifier}
  \item{GEOID}{Geographic Identifier}

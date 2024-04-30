@@ -8,7 +8,7 @@ in units of degrees Celsius per year.}
 trend_of_temps(
   station_id = NULL,
   date_start = "2000-01-01",
-  date_end = "2020-12-31"
+  date_end = "2024-12-31"
 )
 }
 \arguments{

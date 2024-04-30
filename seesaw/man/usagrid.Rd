@@ -4,7 +4,7 @@
 \alias{usagrid}
 \title{Create a grid of points over the contiguous United States}
 \usage{
-usagrid(resolution = 200)
+usagrid(resolution = 50)
 }
 \arguments{
 \item{resolution}{The number of points to generate in each dimension of the

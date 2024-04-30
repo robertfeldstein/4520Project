@@ -1,10 +1,12 @@
 # Testing file
 
-devtools::load_all("./")
+devtools::load_all()
 
 devtools::test()
 
 devtools::document()
+
+devtools::check()
 
 export(usa_shp)
 ?usa_shp
