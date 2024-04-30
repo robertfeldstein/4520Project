@@ -100,18 +100,85 @@ graph_interp(spatial_model, grid)
 
 ```
 
-3. Estimate the warmest and coldest day of the year for each station, and plot those days on two maps.Think carefully about how to represent the days numerically. 
+3. Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically. 
 
-In your report, describe the statistical analsysi that you used for estimating the warmest and coldest days at each station, including writing down any statistical models in mathematical notation. Be sure to define all your symbols and assumptions. 
+In your report, describe the statistical analysis that you used for estimating the warmest and coldest days at each station, including writing down any statistical models in mathematical notation. Be sure to define all your symbols and assumptions. 
 
-Interpolate mpas of the warmest and coldest days, and plot the interpolated maps of warmest and coldest days. 
+Interpolate maps of the warmest and coldest days, and plot the interpolated maps of warmest and coldest days. 
 
 ```{r}
+
+warmest_coldest <- function(station_id){
+  cycle <- yearly_cycle_station(station_id, "T_DAILY_AVG")
+  warmest_day <- cycle$DOY[which.max(cycle$Expected_T_DAILY_AVG)]
+  coldest_day <- cycle$DOY[which.min(cycle$Expected_T_DAILY_AVG)]
+  c(warmest_day, coldest_day)
+}
+
+# Preallocate the data frame
+warmest_coldest_days <- data.frame(station_id = station_ids, warmest_day = numeric(length(station_ids)), coldest_day = numeric(length(station_ids)))
+
+# Loop through each station
+for (i in 1:length(station_ids)){
+  # Assign values directly without using c()
+  warmest_coldest_days[i, c("warmest_day", "coldest_day")] <- warmest_coldest(station_ids[i])
+}
+
+# Plot the shapefile and add the warmest day data as points
+df_warmest <- merge(warmest_coldest_days, station_info, by.x = "station_id", by.y = "station_id")
+
+# Drop na
+#df_warmest <- df_warmest[complete.cases(df_warmest),]
+
+df_warmest_sf <- st_as_sf(df_warmest, coords = c("longitude", "latitude"), crs = 
+                           st_crs(usa_boundary))
+
+coordinates <- st_coordinates(df_warmest_sf)
+df_warmest_sf$x <- coordinates[,1]
+df_warmest_sf$y <- coordinates[,2]
+
+ggplot() +
+  geom_sf(data = usa_boundary) +
+  coord_sf(lims_method = "geometry_bbox") +
+  geom_point(data = df_warmest_sf, aes(color = warmest_day, x = x, y = y), size = 1) +
+  theme_minimal() +
+  labs(title = "Warmest Day of the Year for Each Station") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Plot the shapefile and add the coldest day data as points
+ggplot() +
+  geom_sf(data = usa_boundary) +
+  coord_sf(lims_method = "geometry_bbox") +
+  geom_point(data = df_warmest_sf, aes(color = coldest_day, x = x, y = y), size = 1) +
+  theme_minimal() +
+  labs(title = "Coldest Day of the Year for Each Station") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+                                   
+
+
+```
+
+Statistical Model:
+
+The estimated average warmest and coldest day of the year was calculated by fitting a sinusoidal model to the daily average temperature data for each station. The model is given by:
+
+$Y_i = \beta_0 + \beta_1 * \sin(2\pi d/365) + \beta_2*\cos(2\pi d/365) + \epsilon_i$
+
+where $Y_i$ is the daily average temperature, $d$ is the day of the year, and $\epsilon_i$ is the error term. The estimated warmest day of the year is the day with the highest expected temperature, and the estimated coldest day of the year is the day with the lowest expected temperature.
+
+Assumptions:
+1. The daily average temperature data is sinusoidal with a period of 365 days.
+2. The daily average temperature data is stationary over time.
+3. The error term is normally distributed with mean 0 and constant variance.
+
+```{r}
+# Interpolate maps of the warmest and coldest days
 
 ```
 
 
-4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a dvierstiy of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
+4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a diversity of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
 
 ```{r}
 

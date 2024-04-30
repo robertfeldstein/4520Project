@@ -24,8 +24,6 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   # Load the data file
   load(full_table_path)
   load(station_info_path)
-  #load("data/full_table.RData")
-  #load("data/station_info.RData")
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]
