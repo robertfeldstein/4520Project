@@ -24,16 +24,6 @@ library(GpGp)
 ### Load the Data
 
 ```{r}
-# Get file paths
-# full_table_path <- system.file("Data", "full_table.RData", package = "seesaw")
-# station_info_path <- system.file("Data", "station_info.RData", package = 
-#                                    "seesaw")
-# shp_file_path <- system.file("Data", "shp_file.Rdata", package = "seesaw")
-# 
-# # Load the data file
-# load(full_table_path)
-# load(station_info_path)
-# load(shp_file_path)
 
 data("full_table", package = "seesaw")
 data("station_info", package = "seesaw")
@@ -153,9 +143,6 @@ ggplot() +
   labs(title = "Coldest Day of the Year for Each Station") +
   theme(plot.title = element_text(hjust = 0.5))
 
-                                   
-
-
 ```
 
 Statistical Model:
@@ -172,30 +159,34 @@ Assumptions:
 3. The error term is normally distributed with mean 0 and constant variance.
 
 ```{r}
+
 # Interpolate maps of the warmest and coldest days
-
-# BUGGED ASK AVA FOR HELP
-
 y_warm <- df_warmest$warmest_day
 y_cold <- df_warmest$coldest_day
 locs <- df_warmest[, c("longitude", "latitude")]
 locs$longitude <- as.numeric(locs$longitude)
 locs$latitude <- as.numeric(locs$latitude)
 X <- cbind(1, locs)
-grid <- usagrid(100)
+
+# Fit model
 warm_model <- fit_model(y_warm,locs, X, covfun_name = "matern_sphere", 
                         silent = T)
 cold_model <- fit_model(y_cold,locs, X, covfun_name = "matern_sphere",
                             silent = T)
+grid <- usagrid(100)
 
+# Create prediction matrix
 Xpred <- cbind(1, grid[, c("x", "y")])
 pred_locs <- grid[, c("x", "y")]
 
+# Make predictions
 warm_pred <- predictions(warm_model,pred_locs, Xpred)
 cold_pred <- predictions(cold_model,pred_locs, Xpred)
 
+# Plot interpolations
 graph_interp(warm_pred, grid)
 graph_interp(cold_pred, grid)
+
 ```
 
 
@@ -208,7 +199,7 @@ graph_interp(cold_pred, grid)
 #   Michigan, Pennsylvania )
 stations <- c("94645", "04223", "53169", "04131", "53182", "12987", "63849", 
               "92826", "54810", "03761")
-names <- c("Maine", "Washington", "Arizona", "Wyoming", "Oklahoma", "Texas", 
+states <- c("Maine", "Washington", "Arizona", "Wyoming", "Oklahoma", "Texas", 
            "Kentucky", "Florida", "Michigan", "Pennsylvania")
 # Select 10 colors
 cols <- c("chartreuse1", "darkcyan", "dodgerblue4", "goldenrod1", "darkorange1",
@@ -220,14 +211,14 @@ plt <- ggplot() +
 # Calculate and plot estimated yearly cycle for each station
 for (i in 1:10){
   cycle <- yearly_cycle_station(stations[i])
-  cycle$station <- stations[i]
+  cycle$state <- states[i]
   plt <- plt + geom_line(data = cycle, 
                            aes(x = DOY, y = Expected_T_DAILY_AVG,
-                               color = station))
+                               color = state))
 }
 # Add legend
-plt <- plt + scale_color_manual(name = "Station ID", breaks = stations, 
-                                values = setNames(cols, stations))
+plt <- plt + scale_color_manual(name = "State with Station", breaks = states, 
+                                values = setNames(cols, states))
 plt
 ```
 
@@ -249,10 +240,30 @@ station_trends <- merge(station_trends, station_info, by.x = "station_id",
                         by.y = "station_id")
 
 # Determine which trends are statistically significant
-station_trends$signif
+sd <- var(station_trends$trend)
+n <- length(station_trends$trend)
+test_statistics <- (station_trends$trend - 0) / ( sd/sqrt(n) )
+p_vals <- pt( test_statistics, df = n - 1, lower.tail = FALSE )
 
-# Drop NAs
-station_trends <- station_trends[complete.cases(station_trends), ]
+determine_significance <- function(pval){
+  
+  # Assume all pvals are greater than 0.05
+  signif <- " "
+  # Greater than 0.01, less than 0.05
+  if (pval <= 0.05 & pval > 0.01) {
+    signif <- "*"
+  } else if (pval <= 0.01 & pval > 0.001) {
+  # Greater than 0.001, less than 0.01
+    signif <- "**"
+  } else if (pval <= 0.001) {
+  # Less than 0.001
+    signif <- "***"
+  }
+  return(signif)
+}
+
+station_trends$signif <- sapply(p_vals, determine_significance)
+
 
 # Plot the USA shapefile
 usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
@@ -278,6 +289,26 @@ ggplot() +
   
 
 ```
+
+Statistical Model:
+
+The estimated trend over the years for each station was calculated by fitting a linear model for each month of the year and taking the average of the slope coefficients from each linear model. This is given by:
+
+$ estimated trend = ( \sum_(i = 1)^12 (\beta_1)_i )/ 12 $
+
+where $(\beta_1)_i$ denotes the slope coefficient for ith month, and is derived from the model:
+
+$Y_i = \beta_0 + \beta_1 *d + \epsilon_i$
+
+where $Y_i$ is the daily average temperature, $d$ is the day of the year, and $\epsilon_i$ is the error term. 
+
+Assumptions:
+1. The change in temperature over the years can be modeled linearly. Further, we assume that the the change in monthly temperatures overall the years follows a linear trend as well.
+2. The overall trend for each month contributes equal to the station’s trend overall (that is, each month’s trend is equally indicative of the trend overall)
+3. The error term is normally distributed with mean 0 and constant variance.
+
+To determine statistical significance, we assume that the temperature trends of stations are normally distributed with mean 0, indicating the temperature has not changed over the years. We run a t-test with significance level $\alpha = 0.05$ to determine which trends are significant.
+
 ```{r}
 # Interpolate trends for contigous US
 ```
