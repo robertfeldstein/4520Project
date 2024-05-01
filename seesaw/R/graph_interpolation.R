@@ -22,7 +22,22 @@
 
 
 graph_interp <- function(preds,grid){
-
+  
+  # Check that preds is numeric
+  if (!is.numeric(preds)) {
+    stop("preds must be a numeric vector")
+  }
+  
+  # Check that grid is a data frame with columns x,y
+  if (!is.data.frame(grid) | !all(c("x", "y") %in% colnames(grid))) {
+    stop("grid must be a data frame with columns x and y")
+  }
+  
+  # Check that the length of preds is equal to the number of rows in grid
+  if (length(preds) != nrow(grid)) {
+    stop("length of preds must be equal to the number of rows in grid")
+  }
+  
   # Extract x,y coordinates of grid points
   locs_pred <- grid[, c("x", "y")]
   # Plot interpolation
@@ -38,6 +53,4 @@ graph_interp <- function(preds,grid){
                   x = "Longitude",
                   y = "Latitude")
 }
-
-
 

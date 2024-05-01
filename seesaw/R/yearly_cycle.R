@@ -14,7 +14,7 @@
 #' year.
 #'
 #' @examples
-#' yearly_cycle_station("03013")
+#' yearly_cycle_station("53878")
 #' 
 #' @export
 
@@ -23,6 +23,19 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   # Load tables
   data("full_table", package = "seesaw")
   data("station_info", package = "seesaw")
+  
+  # Check that id is a character and in station_info
+  if(!is.character(id)){
+    stop("id must be a character")
+  }
+  if(!(id %in% station_info$station_id)){
+    stop("id must be a WBANNO present in station_info")
+  }
+  
+  # Check that variable is in full_table
+  if(!(variable %in% names(full_table))){
+    stop("variable must be a variable present in full_table")
+  }
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]
@@ -40,8 +53,7 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   station_data$COS_DOY2 <- cos(4 * pi * station_data$DOY / 365.25)
 
   #Perform linear regression
-  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2 + 
-                       SIN_DOY3 + COS_DOY3")
+  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2")
   lm_fit <- lm(formula_str, data = station_data)
 
   #Create a data frame with the expected temperature for each day
@@ -56,6 +68,4 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   return(expected_temps)
 
 }
-
-
 

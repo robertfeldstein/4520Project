@@ -21,6 +21,26 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   # Load in data
   data("full_table", package = "seesaw")
   data("station_info", package = "seesaw")
+  
+  # Check that station_id is null or a vector of station_ids
+  if (!is.null(station_id) && !all(station_id %in% station_info$station_id)){
+    stop("station_id must be NULL or a vector of station_ids")
+  }
+  
+  # Check that date_start and date_end are both dates
+  # formatted as "YYYY-MM-DD"
+  if (!inherits(as.Date(date_start, format = "%Y-%m-%d") , "Date")){
+    stop("date_start must be a date in the format 'YYYY-MM-DD'")
+  }
+  
+  if (!inherits(as.Date(date_end, format = "%Y-%m-%d"), "Date")){
+    stop("date_end must be a date in the format 'YYYY-MM-DD'")
+  }
+  
+  # Check that date_start is before date_end
+  if (as.Date(date_start) > as.Date(date_end)){
+    stop("date_start must be before date_end")
+  }
 
   # Filter the data to include only the dates of interest
   full_table <- full_table[full_table$LST_DATE >= date_start

@@ -18,7 +18,12 @@
 #' @export
 
 usagrid <- function(resolution=50) {
-
+  
+  # Check that resolution is a positive integer
+  if (!is.numeric(resolution) | resolution <= 0 | resolution %% 1 != 0) {
+    stop("resolution must be a positive integer")
+  }
+  
   data("shp_file", package = "seesaw")
   multi_polygon <- sf::st_geometry(shp_file)
 
@@ -65,7 +70,6 @@ usagrid <- function(resolution=50) {
   return(grid_df)
 
 }
-
 
 
 

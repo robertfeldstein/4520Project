@@ -29,6 +29,43 @@
 
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
                              resolution = 200){
+  
+  # Check that start_date and end_date are both dates
+  # formatted as "YYYY-MM-DD"
+  
+  if (!inherits(as.Date(start_date, format = "%Y-%m-%d"), "Date")){
+    stop("start_date must be a date in the format 'YYYY-MM-DD'")
+  }
+  
+  if (!inherits(as.Date(end_date, format = "%Y-%m-%d"), "Date")){
+    stop("end_date must be a date in the format 'YYYY-MM-DD'")
+  }
+  
+  # Check that start_date is before end_date
+  if (as.Date(start_date) > as.Date(end_date)){
+    stop("start_date must be before end_date")
+  }
+  
+  # Check that var is a column in the full_table data frame
+  if (!(var %in% colnames(full_table))){
+    stop("var must be a column in the full_table data frame")
+  }
+  
+  # Check that resolution is a numeric value
+  if (!is.numeric(resolution)){
+    stop("resolution must be a numeric value")
+  }
+  
+  # Check that resolution is greater than 0
+  if (resolution <= 0){
+    stop("resolution must be greater than 0")
+  }
+  
+  # Check that resolution is an integer
+  if (!resolution %% 1 == 0){
+    stop("resolution must be an integer")
+  }
+  
   # Load in the full_table
   data("full_table", package = "seesaw")
 

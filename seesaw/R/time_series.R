@@ -23,6 +23,22 @@ time_series_station <- function(id, start_date = 11275, end_date = 19820){
   # Load tables
   data("full_table", package = "seesaw")
   data("station_info", package = "seesaw")
+  
+  # Check that id is in the station_info data frame
+  if (!(id %in% station_info$station_id)){
+    stop("id must be in the station_info data frame")
+  }
+  
+  # Check that start_date and end_date are both dates
+  # formatted as "YYYY-MM-DD"
+  
+  if (!inherits(as.Date(start_date, format = "%Y-%m-%d"), "Date")){
+    stop("start_date must be a date in the format 'YYYY-MM-DD'")
+  }
+  
+  if (!inherits(as.Date(end_date, format = "%Y-%m-%d"), "Date")){
+    stop("end_date must be a date in the format 'YYYY-MM-DD'")
+  }
 
   # Extract the station data
   station_data <- full_table[full_table$WBANNO == id,]
