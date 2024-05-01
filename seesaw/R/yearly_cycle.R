@@ -15,11 +15,11 @@
 #'
 #' @examples
 #' yearly_cycle_station("03013")
-#' 
+#'
 #' @export
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
-  
+
   # Load tables
   data("full_table", package = "seesaw")
   data("station_info", package = "seesaw")
@@ -33,15 +33,14 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   # Add sines and cosines to the data frame
   station_data$SIN_DOY <- sin(2 * pi * station_data$DOY / 365.25)
   station_data$COS_DOY <- cos(2 * pi * station_data$DOY / 365.25)
-  
+
   # Add higher order sines and cosines to allow for more complex yearly cycles
-  
+
   station_data$SIN_DOY2 <- sin(4 * pi * station_data$DOY / 365.25)
   station_data$COS_DOY2 <- cos(4 * pi * station_data$DOY / 365.25)
 
   #Perform linear regression
-  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2 + 
-                       SIN_DOY3 + COS_DOY3")
+  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2")
   lm_fit <- lm(formula_str, data = station_data)
 
   #Create a data frame with the expected temperature for each day
@@ -51,7 +50,7 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
     lm_fit$coefficients[2] * sin(2 * pi * expected_temps$DOY / 365.25) +
     lm_fit$coefficients[3] * cos(2 * pi * expected_temps$DOY / 365.25) +
     lm_fit$coefficients[4] * sin(4 * pi * expected_temps$DOY / 365.25) +
-    lm_fit$coefficients[5] * cos(4 * pi * expected_temps$DOY / 365.25) 
+    lm_fit$coefficients[5] * cos(4 * pi * expected_temps$DOY / 365.25)
 
   return(expected_temps)
 
