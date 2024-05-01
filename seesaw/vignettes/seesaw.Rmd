@@ -92,6 +92,29 @@ graph_interp(spatial_model, grid) +
     x = "Longitude", y = "Latitude", 
     fill = "Temperature (°C)")
 
+library("elevatr")
+# Fit a spatial model with elevation
+grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")], 
+                                          prj = st_crs(usa_boundary))$elevation
+y_dat <- full_table[(full_table$LST_DATE >= "2024-03-01") &
+                             (full_table$LST_DATE <= "2024-03-31"), ]
+y_dat$x <- y_dat$LONGITUDE
+y_dat$y <- y_dat$LATITUDE
+y_dat$elevation <- elevatr::get_elev_point(y_dat[, c("x", "y")], prj = st_crs(usa_boundary))$elevation
+X <- model.matrix(~ elevation, data = y_dat)
+# Store response variable
+y <- y_dat[ , "T_DAILY_AVG"]
+# Subset data frame and store locations
+locs <- y_dat[, c("x", "y")]
+# Create model matrix
+# Fit the Gaussian process model
+model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere",
+                           start_parms = c(42.2746, 2.6493, 0.1902, 2.0873), 
+                           silent = T)
+Xpred <- model.matrix(~ elevation, data = grid)
+locs_pred <- grid[, c("x", "y")]
+preds <- GpGp::predictions(model,locs_pred, Xpred)
+graph_interp(preds,grid)
 
 ```
 
