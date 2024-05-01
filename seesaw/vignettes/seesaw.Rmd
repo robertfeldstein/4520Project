@@ -381,4 +381,11 @@ graph_interp(trend_preds, grid) +
 
 6. Find a reputable source for the average temperature trend in the contiguous USA over the past 20 years, and compare your results to the source's.
 
+Reputable Source: US EPA 
+https://www.epa.gov/climate-indicators/climate-change-indicators-us-and-global-temperature
+
+The EPA reports that the average temperature in the contiguous US has risen by 0.55°F per decade since 1981. This is equivalent to 0.306°C per decade. Our model estimates the average temperature trend in the contiguous US to be roughly 0.88°C per decade. However, this is largely due to the fact that we are only considering the temperature trends since 2000, where temperature has been increasing even faster. Additionally, it is the case that the vast majority of the US is increasing at a rate lower than 0.88°C per decade, while stations in the Southwest are increasing at a much greater rate. 
+
+
+
 

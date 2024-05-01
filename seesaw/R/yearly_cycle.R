@@ -14,13 +14,8 @@
 #' year.
 #'
 #' @examples
-<<<<<<< HEAD
-#' yearly_cycle_station("53878")
-#' 
-=======
 #' yearly_cycle_station("03013")
 #'
->>>>>>> 98af3b539d0aedc013c7b4d1ebe5da91379c00e5
 #' @export
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
