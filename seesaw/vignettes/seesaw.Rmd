@@ -84,7 +84,7 @@ including elevation in your model.
 
 ```{r}
 
-res <- 100
+res <- 50
 spatial_model <- interpolate_grid("2024-03-01","2024-03-31","T_DAILY_AVG", res)
 grid <- usagrid(res)
 graph_interp(spatial_model, grid) + 
