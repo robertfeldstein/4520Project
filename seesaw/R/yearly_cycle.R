@@ -58,8 +58,7 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   station_data$COS_DOY2 <- cos(4 * pi * station_data$DOY / 365.25)
 
   #Perform linear regression
-  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2 + 
-                       SIN_DOY3 + COS_DOY3")
+  formula_str <- paste(variable, "~ SIN_DOY + COS_DOY + SIN_DOY2 + COS_DOY2")
   lm_fit <- lm(formula_str, data = station_data)
 
   #Create a data frame with the expected temperature for each day
