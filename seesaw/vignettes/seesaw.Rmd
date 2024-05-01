@@ -168,10 +168,20 @@ locs$longitude <- as.numeric(locs$longitude)
 locs$latitude <- as.numeric(locs$latitude)
 X <- cbind(1, locs)
 
+# Make a dataframe of locations and y_cold
+cold_dataset <- cbind(locs,y_cold)
+# Drop repeated rows
+cold_dataset <- cold_dataset[!duplicated(cold_dataset),]
+X_cold <- cbind(1, cold_dataset[, c("longitude", "latitude")])
+y_cold <- cold_dataset$y_cold
+locs_cold <- cold_dataset[, c("longitude", "latitude")]
+
 # Fit model
 warm_model <- fit_model(y_warm,locs, X, covfun_name = "matern_sphere", 
                         silent = T)
-cold_model <- fit_model(y_cold,locs, X, covfun_name = "matern_sphere",
+
+# Problem is that cold_model only has one intercept, it should have 3
+cold_model <- fit_model(y_cold, locs_cold, X_cold, covfun_name = "exponential_sphere",
                             silent = T)
 grid <- usagrid(100)
 
@@ -181,6 +191,7 @@ pred_locs <- grid[, c("x", "y")]
 
 # Make predictions
 warm_pred <- predictions(warm_model,pred_locs, Xpred)
+undebug(predictions)
 cold_pred <- predictions(cold_model,pred_locs, Xpred)
 
 # Plot interpolations
