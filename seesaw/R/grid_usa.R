@@ -13,7 +13,7 @@
 #' United States.
 #'
 #' @examples
-#' grid_usa(100)
+#' usagrid(100)
 #' 
 #' @export
 

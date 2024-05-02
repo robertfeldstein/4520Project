@@ -14,7 +14,7 @@
 #' year.
 #'
 #' @examples
-#' yearly_cycle_station("03013")
+#' yearly_cycle_station("03047")
 #'
 #' @export
 

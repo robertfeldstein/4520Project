@@ -5,7 +5,7 @@
 \title{A function for interpolating data from the stations to a grid points within
 the contiguous USA.}
 \usage{
-interpolate_grid(start_date, end_date, var = "T_DAILY_AVG", resolution = 200)
+interpolate_grid(start_date, end_date, var = "T_DAILY_AVG", resolution = 50)
 }
 \arguments{
 \item{start_date}{The start date to interpolate the variable for. Expects a
@@ -31,6 +31,6 @@ The function takes a start, end date, variable, and resolution as input to
 interpolate that variable over the lower 48 states during that time period.
 }
 \examples{
-interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
+interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 50)
 
 }

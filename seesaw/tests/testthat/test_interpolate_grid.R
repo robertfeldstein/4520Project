@@ -5,12 +5,12 @@ test_that( "interpolate_grid looks okay", {
   interp1 <- interpolate_grid(start_date = "2008-01-01",
                               end_date = "2008-01-31",
                               var = "T_DAILY_AVG",
-                              resolution = 200)
+                              resolution = 50)
 
   # Check to make sure that the lenght of interpolation vector is equal to
   # number of rows in grid with same resolution
   expect_equal(
-    nrow( usagrid(200) ),
+    nrow( usagrid(50) ),
     length(interp1)
   )
 

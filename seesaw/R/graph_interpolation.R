@@ -15,8 +15,8 @@
 #' @return A ggplot2 object that graphs the interpolated values over the US grid.
 #'
 #' @examples
-#' preds <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
-#' graph_interp(preds, 200)
+#' preds <- interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 50)
+#' graph_interp(preds, usagrid(50))
 #'
 #' @export
 

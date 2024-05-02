@@ -23,12 +23,12 @@
 #' variable over the contiguous USA.
 #'
 #' @examples
-#' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 200)
+#' interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 50)
 #' 
 #' @export
 
 interpolate_grid <- function(start_date, end_date, var = "T_DAILY_AVG",
-                             resolution = 200){
+                             resolution = 50){
   
   # Check that start_date and end_date are both dates
   # formatted as "YYYY-MM-DD"

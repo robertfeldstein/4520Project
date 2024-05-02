@@ -21,6 +21,6 @@ United States and does not include points over Alaska, Hawaii, or any of
 the territories.
 }
 \examples{
-grid_usa(100)
+usagrid(100)
 
 }
