@@ -3,7 +3,7 @@ title: "seesaw"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{seesaw}
-  %\VignetteEngine{rmarkdown::render}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

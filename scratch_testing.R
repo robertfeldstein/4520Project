@@ -8,6 +8,8 @@ devtools::document()
 
 devtools::check()
 
+devtools::install(build_vignettes = T)
+
 export(usa_shp)
 ?usa_shp
 ?time_series_station
