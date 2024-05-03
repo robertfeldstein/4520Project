@@ -105,16 +105,16 @@ graph_interp(spatial_model, grid) +
 A model with elevation: 
 
 ```{r}
-library("elevatr")
-# Fit a spatial model with elevation
-grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")], 
-                                          prj = st_crs(usa_boundary))$elevation
-X$elevation <- elevatr::get_elev_point(locs, prj = st_crs(usa_boundary))$elevation
-
-Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
-# Create model matrix
-preds <- interpolate_grid(X, y, Xpred = Xpred)
-graph_interp(preds,grid)
+# library("elevatr")
+# # Fit a spatial model with elevation
+# grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")], 
+#                                           prj = st_crs(usa_boundary))$elevation
+# X$elevation <- elevatr::get_elev_point(locs, prj = st_crs(usa_boundary))$elevation
+# 
+# Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
+# # Create model matrix
+# preds <- interpolate_grid(X, y, Xpred = Xpred)
+# graph_interp(preds,grid)
 
 ```
 
