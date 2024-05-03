@@ -372,24 +372,20 @@ Assumptions:
 To determine statistical significance, we assume that the temperature trends of stations are normally distributed with mean 0, indicating the temperature has not changed over the years. We run a t-test with significance level $\alpha = 0.05$ to determine which trends are significant.
 
 ```{r}
+
+res <- 200
+
 # Interpolate trends for contiguous US
 y <- station_trends$trend
 locs <- station_trends[, c("longitude", "latitude")]
-locs$longitude <- as.numeric(locs$longitude)
-locs$latitude <- as.numeric(locs$latitude)
-X <- cbind(1, locs)
+names(locs) <- c("x", "y")
+locs$x <- as.numeric(locs$x)
+locs$y <- as.numeric(locs$y)
+X <- as.data.frame(cbind(1, locs))
 
-# Fit model
-trend_model <- fit_model(y, locs, X, covfun_name = "matern_sphere", 
-                        silent = T)
-grid <- usagrid(100)
-
-# Create prediction matrix
-Xpred <- cbind(1, grid[, c("x", "y")])
-pred_locs <- grid[, c("x", "y")]
-
+grid <- usagrid(res)
 # Make predictions
-trend_preds <- predictions(trend_model,pred_locs, Xpred)
+trend_preds <- interpolate_grid(X,y,resolution = res)
 
 # Plot interpolations
 graph_interp(trend_preds, grid) + 
