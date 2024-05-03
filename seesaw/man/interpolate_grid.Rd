@@ -5,20 +5,22 @@
 \title{A function for interpolating data from the stations to a grid points within
 the contiguous USA.}
 \usage{
-interpolate_grid(start_date, end_date, var = "T_DAILY_AVG", resolution = 50)
+interpolate_grid(X, y, Xpred = NULL, resolution = 50)
 }
 \arguments{
-\item{start_date}{The start date to interpolate the variable for. Expects a
-date in the format of the LST_DATE column in the full_table data frame. This
-format is "YYYY-MM-DD".}
+\item{X}{The design matrix. Expects a dataframe with one column of 1s for
+the intercept, an 'x' column for the longitude, and a 'y' column for the 
+latitude. Additional columns can be included to account for other 
+covariates.}
 
-\item{end_date}{The end date to interpolate the variable for. Expects a date
-in the format of the LST_DATE column in the full_table data frame. This
-format is "YYYY-MM-DD".}
+\item{y}{The response variable that would like to be interpolated. Must be
+a numeric vector with the same number of rows as X.}
 
-\item{var}{The variable to interpolate. Default is "T_DAILY_AVG". Variable
-must be a column in the full_table data frame. For a list of variables, see
-the full_table data frame documentation.}
+\item{Xpred}{The design matrix for the prediction grid. If NULL, the function
+will create a grid of points over the contiguous USA at the 
+specified resolution. Xpred expects a dataframe with one column of 1s for
+the intercept, an 'x' column for the longitude, and a 'y' column for the
+latitude. Additional columns can be included to account for other covariates.}
 
 \item{resolution}{The resolution of the grid to interpolate the variable over.}
 }
@@ -31,6 +33,9 @@ The function takes a start, end date, variable, and resolution as input to
 interpolate that variable over the lower 48 states during that time period.
 }
 \examples{
-interpolate_grid("2024-03-01", "2024-03-31", "T_DAILY_AVG", 50)
+X <- data.frame(x = c(-102.81, -106.89, -102.77), y = c(31.62, 34.36, 33.96))
+X <- cbind(1, X)
+y <- c(1, 2, 3)
+interpolate_grid(X, y, Xpred = NULL, resolution = 50)
 
 }

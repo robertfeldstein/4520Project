@@ -43,13 +43,17 @@ station_ids <- station_info$station_id
 # temperature for each station
 march_data <- full_table[full_table$LST_DATE >= "2024-03-01" 
                          & full_table$LST_DATE <= "2024-03-31", ]
+
+# Remove NAs
+march_data <- march_data[complete.cases(march_data), ]
+
 average_temps <- aggregate(march_data$T_DAILY_AVG,
                            by = list( march_data$WBANNO ),
                            FUN = mean )
 
 # Create a new data frame with station ids, average temperatures,lat and lon
 df <- data.frame(station_id = unique(march_data$WBANNO), 
-                 average_temp = average_temps$x)
+                 average_temp = average_temps$x) 
 # Merge df with station_info to get lat and lon
 df <- merge(df, station_info, by.x = "station_id", by.y = "station_id")
 
@@ -68,13 +72,14 @@ df_sf$y <- coordinates[,2]
 
 ggplot() +
   geom_sf(data = usa_boundary) +
-  coord_sf(lims_method = "geometry_bbox") +
   geom_point(data = df_sf, aes(color = average_temp, x = x, y = y), size = 1) +
+  coord_sf(xlim = c(-125, -66.93457), ylim = c(22.396308, 49.384358)) +
   theme_minimal() +
   labs(title = "Average Temperature for March 2024", 
        x = "Longitude", y = "Latitude") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  scale_color_gradient(name = "Temperature (°C)", low = "blue", high = "red")
+  scale_color_gradient(name = "Temperature (°C)", low = "blue", high = "red") +
+  theme(plot.title = element_text(hjust = 0.5))
+
   
 
 ```
@@ -82,38 +87,33 @@ ggplot() +
 2. Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider
 including elevation in your model.
 
-```{r}
+A model without elevation: 
 
+```{r}
 res <- 50
-spatial_model <- interpolate_grid("2024-03-01","2024-03-31","T_DAILY_AVG", res)
+X <- as.data.frame(model.matrix(~ x+y , data = df_sf))
+y <- df_sf$average_temp
+locs <- df_sf[, c("x", "y")]
+spatial_model <- interpolate_grid(X,y,resolution = res)
 grid <- usagrid(res)
 graph_interp(spatial_model, grid) + 
   labs( title = "Interpolated Average Temperatures for March 2024",
     x = "Longitude", y = "Latitude", 
     fill = "Temperature (°C)")
+```
 
+A model with elevation: 
+
+```{r}
 library("elevatr")
 # Fit a spatial model with elevation
 grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")], 
                                           prj = st_crs(usa_boundary))$elevation
-y_dat <- full_table[(full_table$LST_DATE >= "2024-03-01") &
-                             (full_table$LST_DATE <= "2024-03-31"), ]
-y_dat$x <- y_dat$LONGITUDE
-y_dat$y <- y_dat$LATITUDE
-y_dat$elevation <- elevatr::get_elev_point(y_dat[, c("x", "y")], prj = st_crs(usa_boundary))$elevation
-X <- model.matrix(~ elevation, data = y_dat)
-# Store response variable
-y <- y_dat[ , "T_DAILY_AVG"]
-# Subset data frame and store locations
-locs <- y_dat[, c("x", "y")]
+X$elevation <- elevatr::get_elev_point(locs, prj = st_crs(usa_boundary))$elevation
+
+Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
 # Create model matrix
-# Fit the Gaussian process model
-model <- GpGp::fit_model(y,locs, X, covfun_name = "matern_sphere",
-                           start_parms = c(42.2746, 2.6493, 0.1902, 2.0873), 
-                           silent = T)
-Xpred <- model.matrix(~ elevation, data = grid)
-locs_pred <- grid[, c("x", "y")]
-preds <- GpGp::predictions(model,locs_pred, Xpred)
+preds <- interpolate_grid(X, y, Xpred = Xpred)
 graph_interp(preds,grid)
 
 ```
@@ -183,6 +183,11 @@ ggplot() +
 
 ```
 
+Note on figures: The point that looks like it is in the middle of Lake Ontario 
+is actually in Ontario, Canada. Interestingly, NOAA includes one Canadian station
+in their dataset. Although not technically a part of the "lower 48" it still
+includes valuable data for the region.
+
 Statistical Model:
 
 The estimated average warmest and coldest day of the year was calculated by fitting a sinusoidal model to the daily average temperature data for each station. The model is given by:
@@ -197,8 +202,11 @@ Assumptions:
 3. The error term is normally distributed with mean 0 and constant variance.
 
 ```{r}
+# Creat higher resolution grid 
+res <- 100
+grid <- usagrid(res)
 
-# Interpolate maps of the warmest and coldest days
+# Ensure correct types
 df_warmest_coldest$longitude <- as.numeric(df_warmest_coldest$longitude)
 df_warmest_coldest$latitude <- as.numeric(df_warmest_coldest$latitude)
 locs <- df_warmest_coldest[, c("longitude", "latitude")]
@@ -206,46 +214,35 @@ locs <- df_warmest_coldest[, c("longitude", "latitude")]
 # Make a dataframes of locations and y_cold/y_warm
 cold_dataset <- df_warmest_coldest[,c("longitude", "latitude", "coldest_day")]
 warm_dataset <- df_warmest_coldest[,c("longitude", "latitude", "warmest_day")]
+
 # Drop repeated rows
 cold_dataset <- cold_dataset[!duplicated(cold_dataset),]
 warm_dataset <- warm_dataset[!duplicated(warm_dataset),]
-X_cold <- cbind(1, cold_dataset[, c("longitude", "latitude")])
-X_warm <- cbind(1, warm_dataset[, c("longitude", "latitude")])
+
+# Set up X and y for the interpolation 
+X_cold <- as.data.frame(cbind(1, cold_dataset[, c("longitude", "latitude")]))
+names(X_cold) <- c("intercept", "x", "y")
+X_warm <- as.data.frame(cbind(1, warm_dataset[, c("longitude", "latitude")]))
+names(X_warm) <- c("intercept", "x", "y")
 y_cold <- cold_dataset$coldest_day
 y_warm <- warm_dataset$warmest_day
-locs_cold <- cold_dataset[, c("longitude", "latitude")]
-locs_warm <- warm_dataset[, c("longitude", "latitude")]
 
-# Fit model
-warm_model <- fit_model(y_warm, locs_warm, X_warm, 
-                        covfun_name = "matern_sphere", 
-                        silent = T)
-
-# Problem is that cold_model only has one intercept, it should have 3
-cold_model <- fit_model(y_cold, locs_cold, X_cold, 
-                        covfun_name = "exponential_sphere",
-                            silent = T)
-
-# Create prediction matrix
-grid <- usagrid(100)
-Xpred <- cbind(1, grid[, c("x", "y")])
-pred_locs <- grid[, c("x", "y")]
-
-# Make predictions
-warm_pred <- predictions(warm_model,pred_locs, Xpred)
-cold_pred <- predictions(cold_model,pred_locs, Xpred)
+# Run the interpolations 
+warm_pred <- interpolate_grid(X_warm, y_warm, resolution = res)
+cold_pred <- interpolate_grid(X_cold,y_cold, resolution = res)
 
 # Plot interpolations
 graph_interp(warm_pred, grid) + 
   labs( title = "Interpolated Warmest Day of the Year",
     x = "Longitude", y = "Latitude", 
-    fill = "Day of Year") 
-# + scale_color_gradient(name = "Day of Year", low = "blue", high = "red")
+    fill = "Day of Year") +
+scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
+
 graph_interp(cold_pred, grid) + 
   labs( title = "Interpolated Coldest Day of the Year",
     x = "Longitude", y = "Latitude", 
-    fill = "Day of Year")
-# + scale_color_gradient(name = "Day of Year", low = "blue", high = "red")
+    fill = "Day of Year") + 
+scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
 ```
 
 

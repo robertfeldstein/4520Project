@@ -140,8 +140,7 @@ average_temps <- aggregate(march_data$T_DAILY_AVG,
                            by = list( march_data$WBANNO ),
                            FUN = mean )
 
-# drop NAs in average_temps
-average_temps <- average_temps[complete.cases(average_temps), ]
+
 
 # Create a new data frame with station ids, average temperatures,lat and lon
 df <- data.frame(station_id = unique(march_data$WBANNO), 
@@ -153,7 +152,6 @@ df <- merge(df, station_info, by.x = "station_id", by.y = "station_id")
 df <- df[complete.cases(df), ]
 df$x <- df$longitude
 df$y <- df$latitude
-
 usa_boundary <- sf::st_crop(sf::st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
                         ymin = 22.396308, ymax = 49.384358)
 
@@ -161,13 +159,19 @@ X <- cbind(1,df[, c("x", "y")])
 X$x <- as.numeric(X$x)
 X$y <- as.numeric(X$y)
 y <- as.numeric(average_temps$x)
+# Remove na from y
+y <- y[!is.na(y)]
 X$elevation <- elevatr::get_elev_point(X[, c("x", "y")], prj = sf::st_crs(usa_boundary))$elevation
 
-grid <- usagrid(25)
-Xpred <- model.matrix( ~ x + y, data = grid)
-Xpred$elevation <- elevatr::get_elev_point(grid, prj = sf::st_crs(usa_boundary))$elevation
-preds <- better_interpolate(X= X, y = y, Xpred = Xpred, resolution = 25)
+grid <- usagrid(50)
+Xpred <- as.data.frame(model.matrix( ~ x + y, data = grid))
+elevations <- elevatr::get_elev_point(grid[,c("x","y")], prj = sf::st_crs(usa_boundary))$elevation
+Xpred$elevation <- elevations
+preds <- better_interpolate(X= X, y = y, Xpred = Xpred, resolution = 50)
 
 # For now use ggplot to plot the interpolated values
 graph_interp(preds,grid)
 
+X_extra <- cbind(1,X[, c("x", "y")])
+new_preds <- better_interpolate(X= X_extra, y = y, Xpred = NULL, resolution = 50)
+graph_interp(new_preds,grid)

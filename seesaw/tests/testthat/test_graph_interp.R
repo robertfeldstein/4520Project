@@ -1,36 +1,12 @@
 
 test_that( "graph_interp looks okay", {
 
-  # Test 1: Graphing interpolation of T_DAILY_AVG in 2008, resolution = 200
-  #         throws no error
-  interp1 <- interpolate_grid(start_date = "2008-01-01",
-                              end_date = "2008-12-31",
-                              var = "T_DAILY_AVG",
-                              resolution = 50)
+  # Test 1: Test that the function runs without error
+  # All it requires is that the input length is the same as the grid length
   grid1 <- usagrid(50)
+  interp1 <- seq(1, 100, length.out = nrow(grid1))
   expect_no_error(
     graph_interp(interp1, grid1)
-  )
-
-  # Test 2: Graphing interpolation of default variable (T_DAILY_AVG) in 2008,
-  #         with default resolution (200) throws no error
-  interp2 <- interpolate_grid(start_date = "2008-01-01",
-                              end_date = "2008-12-31")
-  grid1 <- usagrid(50)
-  expect_no_error(
-    graph_interp(interp2, grid1)
-  )
-
-  # Test 3: Interpolation of different variable, different resolution
-  variable <- "SOLARAD_DAILY"
-  res <- 33
-  interp3 <- interpolate_grid(start_date = "2022-05-01",
-                              end_date = "2022-08-31",
-                              var = variable,
-                              resolution = res)
-  grid3 <- usagrid(res)
-  expect_no_error(
-    graph_interp(interp3, grid3)
   )
 
 
