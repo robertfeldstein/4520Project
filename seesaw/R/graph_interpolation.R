@@ -9,8 +9,7 @@
 #' @param preds A vector of predictions to be interpolated over the US grid. Preds
 #' should be generated from the `interpolate_grid` function.
 #'
-#' @param resolution The resolution of the grid to be used. The resolution should
-#' match the resolution used in the `interpolate_grid` function.
+#' @param grid A dataframe with columns x and y that represents the US grid.
 #'
 #' @return A ggplot2 object that graphs the interpolated values over the US grid.
 #'

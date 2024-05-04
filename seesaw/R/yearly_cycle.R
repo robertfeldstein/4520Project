@@ -21,9 +21,9 @@
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 
   # Load tables
-  data("full_table", package = "seesaw")
-  data("station_info", package = "seesaw")
-  
+  # data("full_table", package = "seesaw")
+  # data("station_info", package = "seesaw")
+
   # Check that id is a character and in station_info
   if(!is.character(id)){
     stop("id must be a character")
@@ -31,7 +31,7 @@ yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
   if(!(id %in% station_info$station_id)){
     stop("id must be a WBANNO present in station_info")
   }
-  
+
   # Check that variable is in full_table
   if(!(variable %in% names(full_table))){
     stop("variable must be a variable present in full_table")

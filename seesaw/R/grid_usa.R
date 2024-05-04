@@ -24,7 +24,7 @@ usagrid <- function(resolution=50) {
     stop("resolution must be a positive integer greater than 2")
   }
 
-  data("shp_file", package = "seesaw")
+  #data("shp_file", package = "seesaw")
   multi_polygon <- sf::st_geometry(shp_file)
 
   # Get x and y coordinates of the multi-polygon

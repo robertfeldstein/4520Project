@@ -13,30 +13,30 @@
 #' in the dataframe stores the mean of the monthly slopes.
 #' @examples
 #' trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
-#' 
+#'
 #' @export
 
 trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
                            date_end = "2024-12-31"){
   # Load in data
-  data("full_table", package = "seesaw")
-  data("station_info", package = "seesaw")
-  
+  # data("full_table", package = "seesaw")
+  # data("station_info", package = "seesaw")
+
   # Check that station_id is null or a vector of station_ids
   if (!is.null(station_id) && !all(station_id %in% station_info$station_id)){
     stop("station_id must be NULL or a vector of station_ids")
   }
-  
+
   # Check that date_start and date_end are both dates
   # formatted as "YYYY-MM-DD"
   if (!inherits(as.Date(date_start, format = "%Y-%m-%d") , "Date")){
     stop("date_start must be a date in the format 'YYYY-MM-DD'")
   }
-  
+
   if (!inherits(as.Date(date_end, format = "%Y-%m-%d"), "Date")){
     stop("date_end must be a date in the format 'YYYY-MM-DD'")
   }
-  
+
   # Check that date_start is before date_end
   if (as.Date(date_start) > as.Date(date_end)){
     stop("date_start must be before date_end")

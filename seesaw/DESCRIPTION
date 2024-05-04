@@ -5,10 +5,13 @@ Version: 0.1.0
 Authors@R: 
     c(person("Robert Feldstein", email = "rhf83@cornell.edu", role = c("aut", "cre")),
     person("Ava Glowney", email = "arg259@cornell.edu", role = "aut"))
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: 
+    Seesaw is a spatial interpolation package that focuses on NOAA weather station
+    data. It uses the GpGp package to interpolate weather data across the United States.
+    The data can be visualized using ggplot2 and sf. The package uses the 2020 
+    census United States shapefile to create a grid of points over the lower 48
+    states. 
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports:
