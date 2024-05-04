@@ -107,7 +107,7 @@ A model with elevation:
 ```{r}
 # library("elevatr")
 # # Fit a spatial model with elevation
-# grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")], 
+# grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")],
 #                                           prj = st_crs(usa_boundary))$elevation
 # X$elevation <- elevatr::get_elev_point(locs, prj = st_crs(usa_boundary))$elevation
 # 

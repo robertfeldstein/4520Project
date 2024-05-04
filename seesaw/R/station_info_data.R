@@ -12,4 +12,5 @@
 #'  \item{longitude}{The longitude of the weather station}
 #'  \item{latitude}{The latitude of the weather station}
 #'  }
+
 "station_info"

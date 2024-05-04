@@ -1,10 +1,12 @@
 # Testing file
 
+
+devtools::document()
+
 devtools::load_all()
 
 devtools::test()
 
-devtools::document()
 
 devtools::check()
 

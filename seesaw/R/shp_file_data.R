@@ -10,4 +10,5 @@
 #'  \item{Name}{United States}
 #'  \item{geometry}{A multipolygon object containing the boundaries of the United States}
 #' }
+
 "shp_file"
