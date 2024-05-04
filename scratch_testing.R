@@ -175,3 +175,8 @@ graph_interp(preds,grid)
 X_extra <- cbind(1,X[, c("x", "y")])
 new_preds <- better_interpolate(X= X_extra, y = y, Xpred = NULL, resolution = 50)
 graph_interp(new_preds,grid)
+
+X <- data.frame(x = c(-102.81, -106.89, -102.77, -89.44), y = c(31.62, 34.36, 33.96, 38.92))
+X <- as.data.frame(cbind(1, X))
+y <- c(1, 2, 1,4)
+interpolate_grid(X, y, Xpred = NULL, resolution = 10)

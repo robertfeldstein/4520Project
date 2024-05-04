@@ -7,30 +7,30 @@
 #' the territories.
 #'
 #' @param resolution The number of points to generate in each dimension of the
-#' grid.
+#' grid. Resolution should be an integer greater than 2.
 #'
 #' @return A data frame containing the grid points within the contiguous
 #' United States.
 #'
 #' @examples
 #' usagrid(100)
-#' 
+#'
 #' @export
 
 usagrid <- function(resolution=50) {
-  
+
   # Check that resolution is a positive integer
-  if (!is.numeric(resolution) | resolution <= 0 | resolution %% 1 != 0) {
-    stop("resolution must be a positive integer")
+  if (!is.numeric(resolution) | resolution <= 1 | resolution %% 1 != 0) {
+    stop("resolution must be a positive integer greater than 2")
   }
-  
+
   data("shp_file", package = "seesaw")
   multi_polygon <- sf::st_geometry(shp_file)
 
   # Get x and y coordinates of the multi-polygon
   x_coords <- sf::st_coordinates(multi_polygon)[, 1]
   y_coords <- sf::st_coordinates(multi_polygon)[, 2]
-  
+
   # Subset the coordinates to only include the contiguous United States
   subset_indices <- x_coords > -125.0 & x_coords < -66.93457 & y_coords > 22.396308 & y_coords < 49.384358
   x_coords <- x_coords[subset_indices]
