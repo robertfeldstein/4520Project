@@ -74,7 +74,7 @@ interpolate_grid <- function(X, y, Xpred = NULL, resolution = 50){
     # Create grid of points
     grid <- usagrid(resolution)
     # Create prediction matrix
-    Xpred <- model.matrix( ~ x + y, data = grid)
+    Xpred <- stats::model.matrix( ~ x + y, data = grid)
   }
 
   # Extract x,y coordinates of grid points

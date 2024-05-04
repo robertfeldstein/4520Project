@@ -88,7 +88,7 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
         next
       }
       # Fit linear model
-      lm_fit <- lm(T_DAILY_AVG ~ LST_DATE, data = station_data)
+      lm_fit <- stats::lm(T_DAILY_AVG ~ LST_DATE, data = station_data)
       # Extract slope
       slope <- lm_fit$coefficients[2]
 

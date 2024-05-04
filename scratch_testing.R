@@ -180,3 +180,5 @@ X <- data.frame(x = c(runif(100,min = -102, max = -81)), y = c(runif(100,min = 3
 X <- as.data.frame(cbind(1, X))
 y <- c(runif(100, min = 0, max = 20))
 interpolate_grid(X, y, Xpred = NULL, resolution = 20)
+
+usethis::use_mit_license()

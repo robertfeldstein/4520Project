@@ -11,7 +11,7 @@ Description:
     The data can be visualized using ggplot2 and sf. The package uses the 2020 
     census United States shapefile to create a grid of points over the lower 48
     states. 
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
