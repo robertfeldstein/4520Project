@@ -9,15 +9,15 @@ interpolate_grid(X, y, Xpred = NULL, resolution = 50)
 }
 \arguments{
 \item{X}{The design matrix. Expects a dataframe with one column of 1s for
-the intercept, an 'x' column for the longitude, and a 'y' column for the 
-latitude. Additional columns can be included to account for other 
+the intercept, an 'x' column for the longitude, and a 'y' column for the
+latitude. Additional columns can be included to account for other
 covariates.}
 
 \item{y}{The response variable that would like to be interpolated. Must be
 a numeric vector with the same number of rows as X.}
 
 \item{Xpred}{The design matrix for the prediction grid. If NULL, the function
-will create a grid of points over the contiguous USA at the 
+will create a grid of points over the contiguous USA at the
 specified resolution. Xpred expects a dataframe with one column of 1s for
 the intercept, an 'x' column for the longitude, and a 'y' column for the
 latitude. Additional columns can be included to account for other covariates.}
@@ -33,9 +33,10 @@ The function takes a start, end date, variable, and resolution as input to
 interpolate that variable over the lower 48 states during that time period.
 }
 \examples{
-X <- data.frame(x = c(-102.81, -106.89, -102.77), y = c(31.62, 34.36, 33.96))
-X <- cbind(1, X)
-y <- c(1, 2, 3)
-interpolate_grid(X, y, Xpred = NULL, resolution = 50)
+
+X <- data.frame(x = c(runif(100,min = -102, max = -81)), y = c(runif(100,min = 31, max = 37)))
+X <- as.data.frame(cbind(1, X))
+y <- c(runif(100, min = 0, max = 20))
+interpolate_grid(X, y, Xpred = NULL, resolution = 20)
 
 }

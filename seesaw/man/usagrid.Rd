@@ -8,7 +8,7 @@ usagrid(resolution = 50)
 }
 \arguments{
 \item{resolution}{The number of points to generate in each dimension of the
-grid.}
+grid. Resolution should be an integer greater than 2.}
 }
 \value{
 A data frame containing the grid points within the contiguous
