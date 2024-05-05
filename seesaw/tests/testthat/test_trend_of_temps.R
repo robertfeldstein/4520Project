@@ -1,61 +1,39 @@
 
 test_that( "trend_of_temps looks okay", {
 
-  # Test 1: Temperature trends for all stations, all dates
-  trend1 <- trend_of_temps()
-
-  # Check to make sure that all stations are included
-  expect_equal(
-    nrow(station_info),
-    nrow(trend1)
-  )
-
-  # Check to make sure that the names of the columns are correct
-  months <- c("January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December")
-  middle.columns <- paste0("trend_", months)
-  columns <- c("station_id", middle.columns, "trend_Overall")
-  expect_equal(
-    columns,
-    names(trend1)
-  )
-
-
-  # Test 2: Temperature trends for a specific station, all dates
+  # Test 1: Temperature trends for  all dates
   station1 <- "22016"
-  trend2 <- trend_of_temps(station1)
+  trend1 <- trend_of_temps(station1)
 
-  # Check to make sure that only station of interest is included
+  # Check to make sure that function returns a list with correct names
   expect_equal(
-    station1,
-    unique( trend2$station_id )
-  )
-
-  # Check to make sure that the names of the columns are correct
-  columns <- c("station_id", middle.columns, "trend_Overall")
-  expect_equal(
-    columns,
+    c("trend", "SE"),
     names(trend1)
   )
 
+  # Check to make sure that trend, SE are numeric
+  expect_equal(
+    TRUE,
+    (class(trend1$trend) == "numeric" & class(trend1$SE) == "numeric")
+  )
 
-  # Test 3: Temperature trends for a specific station, specific dates
+
+  # Test 2: Temperature trends for specific dates
   station2 <- "94084"
   start1 <- "2002-09-28"
   end1 <- "2014-08-11"
-  trend3 <- trend_of_temps(station2, start1, end1)
+  trend2 <- trend_of_temps(station2, start1, end1)
 
-  # Check to make sure that only station of interest is included
+  # Check to make sure that function returns a list with correct names
   expect_equal(
-    station2,
-    unique( trend3$station_id )
+    c("trend", "SE"),
+    names(trend2)
   )
 
-  # Check to make sure that the names of the columns are correct
-  columns <- c("station_id", middle.columns, "trend_Overall")
+  # Check to make sure that trend, SE are numeric
   expect_equal(
-    columns,
-    names(trend1)
+    TRUE,
+    (class(trend2$trend) == "numeric" & class(trend2$SE) == "numeric")
   )
 
 
