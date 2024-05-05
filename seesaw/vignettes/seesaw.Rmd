@@ -64,12 +64,14 @@ df <- df[complete.cases(df), ]
 usa_boundary <- st_crop(st_make_valid(shp_file), xmin = -125, xmax = -66.93457, 
                     ymin = 22.396308, ymax = 49.384358)
 
+# Convert the df to the right coordinate reference system
 df_sf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 
                     st_crs(usa_boundary))
 coordinates <- st_coordinates(df_sf)
 df_sf$x <- coordinates[,1]
 df_sf$y <- coordinates[,2]
 
+# Use ggplot and sf to plot the map
 ggplot() +
   geom_sf(data = usa_boundary) +
   geom_point(data = df_sf, aes(color = average_temp, x = x, y = y), size = 1) +
@@ -90,12 +92,17 @@ including elevation in your model.
 A model without elevation: 
 
 ```{r}
+# Set up the grid for interpolation 
 res <- 50
+grid <- usagrid(res)
+
+# Define the X and y to train the model 
 X <- as.data.frame(model.matrix(~ x+y , data = df_sf))
 y <- df_sf$average_temp
-locs <- df_sf[, c("x", "y")]
+
+# Use seesaw's interpolate_grid function to fit the spatial model
 spatial_model <- interpolate_grid(X,y,resolution = res)
-grid <- usagrid(res)
+
 graph_interp(spatial_model, grid) + 
   labs( title = "Interpolated Average Temperatures for March 2024",
     x = "Longitude", y = "Latitude", 
@@ -130,15 +137,17 @@ Interpolate maps of the warmest and coldest days, and plot the interpolated maps
 # for a given station
 warmest_coldest <- function(station_id){
   cycle <- yearly_cycle_station(station_id, "T_DAILY_AVG")
-  warmest_day <- cycle$DOY[which.max(cycle$Expected_T_DAILY_AVG)]
-  coldest_day <- cycle$DOY[which.min(cycle$Expected_T_DAILY_AVG)]
-  c(warmest_day, coldest_day)
+  #warmest_day <- cycle$DOY[which.max(cycle$Expected_T_DAILY_AVG)]
+  warmest_day <- which.max(cycle$Expected_T_DAILY_AVG)
+  #coldest_day <- cycle$DOY[which.min(cycle$Expected_T_DAILY_AVG)]
+  coldest_day <- which.min(cycle$Expected_T_DAILY_AVG)
+  return(c(warmest_day, coldest_day))
 }
 
 # Preallocate the data frame
 warmest_coldest_days <- data.frame(station_id = station_ids, 
-                                   warmest_day = numeric(length(station_ids)), 
-                                   coldest_day = numeric(length(station_ids)))
+                                   warmest_day = integer(length(station_ids)), 
+                                   coldest_day = integer(length(station_ids)))
 
 # Loop through each station
 for (i in 1:length(station_ids)){
@@ -147,7 +156,7 @@ for (i in 1:length(station_ids)){
     warmest_coldest(station_ids[i])
 }
 
-# Plot the shapefile and add the warmest day data as points
+# Use sf to get the correct coordinate reference system to plot 
 df_warmest_coldest <- merge(warmest_coldest_days, station_info, 
                     by.x = "station_id", by.y = "station_id")
 df_warm_cold_sf <- st_as_sf(df_warmest_coldest, 
@@ -158,6 +167,7 @@ coordinates <- st_coordinates(df_warm_cold_sf)
 df_warm_cold_sf$x <- coordinates[,1]
 df_warm_cold_sf$y <- coordinates[,2]
 
+# Plot the warmest day 
 ggplot() +
   geom_sf(data = usa_boundary) +
   coord_sf(lims_method = "geometry_bbox") +
@@ -202,7 +212,7 @@ Assumptions:
 3. The error term is normally distributed with mean 0 and constant variance.
 
 ```{r}
-# Creat higher resolution grid 
+# Create higher resolution grid 
 res <- 100
 grid <- usagrid(res)
 
