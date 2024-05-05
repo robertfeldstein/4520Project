@@ -18,16 +18,15 @@ should be in the format "YYYY-MM-DD".}
 be in the format "YYYY-MM-DD".}
 }
 \value{
-A data frame with the station ID and a column for each month of the year.
-The column value represents the slope of the temperature trend in degrees Celsius
-of the first day of the month over the time period specified. One final column
-in the dataframe stores the mean of the monthly slopes.
+A named list with the trend (defined as the average increase in
+temperatures on the first of the month over the dates specified) and standard
+error.
 }
 \description{
 A function for estimating the trend of temperatures over time,
 in units of degrees Celsius per year.
 }
 \examples{
-trend_of_temps(c("53878","04130"), "2000-01-01", "2020-12-31")
+trend_of_temps("53878", "2000-01-01", "2020-12-31")
 
 }
