@@ -363,7 +363,7 @@ station_trends <- merge(station_trends, station_info, by.x = "station_id",
                         by.y = "station_id")
 
 # Determine which trends are statistically significant
-sd <- var(station_trends$trend)
+sd <- var(station_trends$trend, na.rm = TRUE)
 n <- length(station_trends$trend)
 test_statistics <- (station_trends$trend - 0) / ( sd/sqrt(n) )
 p_vals <- pt( test_statistics, df = n - 1, lower.tail = FALSE )
@@ -372,6 +372,9 @@ determine_significance <- function(pval){
   
   # Assume all pvals are greater than 0.05
   signif <- " "
+  if (is.nan(pval) || pval > 0.05){
+    return(signif)
+  }
   # Greater than 0.01, less than 0.05
   if (pval <= 0.05 & pval > 0.01) {
     signif <- "*"
