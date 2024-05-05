@@ -297,7 +297,7 @@ Interpolate the estimated trends to a grid, and plot them on a map. For the inte
 
 ```{r}
 # Find the temperature trends for each station (since 2000)
-temp_trends <- trend_of_temps()
+temp_trends <- lapply(station_info$station_id, trend_of_temps)
 
 # Create a new data frame with station ids, temperature trend, lat and long
 station_trends <- data.frame(station_id = temp_trends$station_id, 

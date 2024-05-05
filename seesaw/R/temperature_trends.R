@@ -66,7 +66,13 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
     lm_fit <- stats::lm(T_DAILY_AVG ~ LST_DATE, data = station_data)
     # Extract slope, SE
     slope <- lm_fit$coefficients[2]
-    se <- summary(lm_fit)$coefficients[2,2]
+    summ <- summary(lm_fit)
+    if (nrow(summ$coefficients) >= 2){
+      se <- summ$coefficients[2,2]
+    } else {
+      se <- NA
+    }
+
 
     # Convert the slope to units of degrees Celsius per year
     slope_degrees_per_year <- slope * 365
@@ -84,6 +90,6 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
   SE <- sqrt(varPooled / sum(slope_coefs$n) )
 
 
-  return(list(trend = trend, SE = SE))
+  return(c(trend = trend, SE = SE))
 }
 
