@@ -354,10 +354,11 @@ errors are sufficiently small.
 ```{r}
 # Find the temperature trends for each station (since 2000)
 temp_trends <- sapply(station_info$station_id, seesaw::trend_of_temps)
+temp_trends <- t(temp_trends)
 
 # Create a new data frame with station ids, temperature trend, lat and long
-station_trends <- data.frame(station_id = colnames(temp_trends), 
-                             trend = temp_trends[1,], SE = temp_trends[2,])
+station_trends <- data.frame(station_id = rownames(temp_trends), 
+                             trend = temp_trends[,1], SE = temp_trends[,2])
 # Merge df with station_info to get lat and lon
 station_trends <- merge(station_trends, station_info, by.x = "station_id", 
                         by.y = "station_id")
@@ -372,7 +373,7 @@ determine_significance <- function(pval){
   
   # Assume all pvals are greater than 0.05
   signif <- " "
-  if (is.nan(pval) || pval > 0.05){
+  if (is.na(pval) || pval > 0.05){
     return(signif)
   }
   # Greater than 0.01, less than 0.05
@@ -428,15 +429,24 @@ The estimated trend over the years for each station was calculated by fitting a
 linear model for each month of the year and taking the average of the slope 
 coefficients from each linear model. This is given by:
 
-$ estimated trend = ( \sum_(i = 1)^12 (\beta_1)_i )/ 12 $
+$ estimated\ trend =  \frac { \sum_{i = 1}^{12} \beta_{1i} }{12} $
 
-where $(\beta_1)_i$ denotes the slope coefficient for ith month, and is derived 
+where $\beta_{1i}$ denotes the slope coefficient for ith month, and is derived 
 from the model:
 
 $Y_i = \beta_0 + \beta_1 *d + \epsilon_i$
 
 where $Y_i$ is the daily average temperature, $d$ is the day of the year, and 
 $\epsilon_i$ is the error term. 
+
+The standard error was found by converting the standard error of each month's 
+slope coefficient into a variance, pooling the variances, and calculating the 
+new standard error. That is, 
+
+$ Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12} $
+$ SE = \sqrt\frac {Pooled\ Variance}{N}$
+
+where $SE_i$ is the standard error for the ith month, $n_i$ is the number of available readings for the 1st of that month at that station, and $N$ is the total sample size (total number of available readings for the 1st of all months between the start and end dates at that station). 
 
 Assumptions:
 1. The change in temperature over the years can be modeled linearly. Further, we

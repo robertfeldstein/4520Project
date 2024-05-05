@@ -9,7 +9,8 @@
 #' be in the format "YYYY-MM-DD".
 #' @return A named list with the trend (defined as the average increase in
 #' temperatures on the first of the month over the dates specified) and standard
-#' error.
+#' error. Will return a list with the trend and standard error as NA if the
+#' station is less than two years old.
 #' @examples
 #' trend_of_temps("53878", "2000-01-01", "2020-12-31")
 #'
@@ -67,6 +68,7 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
     # Extract slope, SE
     slope <- lm_fit$coefficients[2]
     summ <- summary(lm_fit)
+    # Account for when SE is NaN
     if (nrow(summ$coefficients) >= 2){
       se <- summ$coefficients[2,2]
     } else {
@@ -83,12 +85,18 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
   }
   # Find average slope coefficient
   trend <- mean(slope_coefs$Trend, na.rm = TRUE)
+  if (is.nan(trend)){
+    trend <- NA
+  }
 
   # Find the standard error
-  vars <- (slope_coefs$SE)^2 * slope_coefs$n
-  varPooled <- sum( vars * ( slope_coefs$n - 1) ) / ( sum(slope_coefs$n) - 12 )
-  SE <- sqrt(varPooled / sum(slope_coefs$n) )
-
+  if (!anyNA(slope_coefs$SE)){
+    vars <- (slope_coefs$SE)^2 * slope_coefs$n
+    varPooled <- sum( vars * ( slope_coefs$n - 1) ) / ( sum(slope_coefs$n) - 12 )
+    SE <- sqrt(varPooled / sum(slope_coefs$n) )
+  } else{
+    SE <- NA
+  }
 
   return(c(trend = trend, SE = SE))
 }
