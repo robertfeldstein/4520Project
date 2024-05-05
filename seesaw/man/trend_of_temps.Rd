@@ -5,15 +5,11 @@
 \title{A function for estimating the trend of temperatures over time,
 in units of degrees Celsius per year.}
 \usage{
-trend_of_temps(
-  station_id = NULL,
-  date_start = "2000-01-01",
-  date_end = "2024-12-31"
-)
+trend_of_temps(station_id, date_start = "2000-01-01", date_end = "2024-12-31")
 }
 \arguments{
-\item{station_id}{A character vector of station IDs to include in the analysis.
-If NULL, all stations are included. Station IDs should be in the format "99999".}
+\item{station_id}{The WBANNO of the station to estimate the temperature trend for, formatted
+as a character. Expects a WBANNO present in the station_info data frame.}
 
 \item{date_start}{A character vector of the start date for the analysis. It
 should be in the format "YYYY-MM-DD".}
