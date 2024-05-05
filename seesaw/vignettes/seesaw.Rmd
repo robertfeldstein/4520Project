@@ -353,7 +353,7 @@ errors are sufficiently small.
 
 ```{r}
 # Find the temperature trends for each station (since 2000)
-temp_trends <- sapply(station_info$station_id, trend_of_temps)
+temp_trends <- sapply(station_info$station_id, seesaw::trend_of_temps)
 
 # Create a new data frame with station ids, temperature trend, lat and long
 station_trends <- data.frame(station_id = colnames(temp_trends), 
@@ -453,11 +453,14 @@ $\alpha = 0.05$ to determine which trends are significant.
 
 ```{r}
 
-res <- 200
+res <- 100
+
+# Subset station_trends to only include significant trends
+significant_trends <- station_trends[station_trends$signif != " ",]
 
 # Interpolate trends for contiguous US
-y <- station_trends$trend
-locs <- station_trends[, c("longitude", "latitude")]
+y <- significant_trends$trend
+locs <- significant_trends[, c("longitude", "latitude")]
 names(locs) <- c("x", "y")
 locs$x <- as.numeric(locs$x)
 locs$y <- as.numeric(locs$y)
@@ -481,13 +484,18 @@ USA over the past 20 years, and compare your results to the source's.
 Reputable Source: US EPA 
 https://www.epa.gov/climate-indicators/climate-change-indicators-us-and-global-temperature
 
+```{r}
+median(significant_trends$trend)*10
+```
+
+
 The EPA reports that the average temperature in the contiguous US has risen by 
 0.55°F per decade since 1981. This is equivalent to 0.306°C per decade. 
 Our model estimates the average temperature trend in the contiguous US to be 
-roughly 0.88°C per decade. However, this is largely due to the fact that we are 
+roughly 0.73°C per decade. However, this is largely due to the fact that we are 
 only considering the temperature trends since 2000, where temperature has been 
 increasing even faster. Additionally, it is the case that the vast majority of 
-the US is increasing at a rate lower than 0.88°C per decade, while stations in 
+the US is increasing at a rate lower than 0.73°C per decade, while stations in 
 the Southwest are increasing at a much greater rate. 
 
 
