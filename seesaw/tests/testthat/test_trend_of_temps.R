@@ -14,7 +14,7 @@ test_that( "trend_of_temps looks okay", {
   # Check to make sure that trend, SE are numeric
   expect_equal(
     TRUE,
-    (class(trend1$trend) == "numeric" & class(trend1$SE) == "numeric")
+    (class(trend1["trend"]) == "numeric" & class(trend1["SE"]) == "numeric")
   )
 
 
@@ -33,7 +33,7 @@ test_that( "trend_of_temps looks okay", {
   # Check to make sure that trend, SE are numeric
   expect_equal(
     TRUE,
-    (class(trend2$trend) == "numeric" & class(trend2$SE) == "numeric")
+    (class(trend2["trend"]) == "numeric" & class(trend2["SE"]) == "numeric")
   )
 
 
