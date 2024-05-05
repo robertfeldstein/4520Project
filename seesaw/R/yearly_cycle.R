@@ -20,10 +20,6 @@
 
 yearly_cycle_station <- function(id, variable = "T_DAILY_AVG"){
 
-  # Load tables
-  # data("full_table", package = "seesaw")
-  # data("station_info", package = "seesaw")
-
   # Check that id is a character and in station_info
   if(!is.character(id)){
     stop("id must be a character")

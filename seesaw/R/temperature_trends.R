@@ -1,8 +1,8 @@
 #' A function for estimating the trend of temperatures over time,
 #' in units of degrees Celsius per year.
 #'
-#' @param station_id A character vector of station IDs to include in the analysis.
-#' If NULL, all stations are included. Station IDs should be in the format "99999".
+#' @param station_id The WBANNO of the station to estimate the temperature trend for, formatted
+#' as a character. Expects a WBANNO present in the station_info data frame.
 #' @param date_start A character vector of the start date for the analysis. It
 #' should be in the format "YYYY-MM-DD".
 #' @param date_end A character vector of the end date for the analysis. It should
@@ -16,15 +16,12 @@
 #'
 #' @export
 
-trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
+trend_of_temps <- function(station_id, date_start = "2000-01-01",
                            date_end = "2024-12-31"){
-  # Load in data
-  # data("full_table", package = "seesaw")
-  # data("station_info", package = "seesaw")
 
-  # Check that station_id is null or a vector of station_ids
-  if (!is.null(station_id) && !all(station_id %in% station_info$station_id)){
-    stop("station_id must be NULL or a vector of station_ids")
+  # Check that station_id is a valid station id
+  if (station_id %in% station_info$station_id){
+    stop("station_id must be a valid WBANNO station id")
   }
 
   # Check that date_start and date_end are both dates
@@ -46,21 +43,12 @@ trend_of_temps <- function(station_id = NULL, date_start = "2000-01-01",
   full_table <- full_table[full_table$LST_DATE >= date_start
                            & full_table$LST_DATE <= date_end, ]
 
-  # Subset the data to include only the stations of interest
-  if ( !is.null(station_id) ){
-    station_info <- station_info[station_info$station_id == station_id, ]
-  }
-
-  # Find the unique station ids
-  stations <- station_info$station_id
-
-
   # Add a day and month column to the the data frame
   full_table$DAY <- as.numeric(format(full_table$LST_DATE, "%d"))
   full_table$MONTH <- as.numeric(format(full_table$LST_DATE, "%m"))
 
   # Initialize data frame to hold slope coefficients for each unique station_id
-  slope_coefs <- data.frame(station_id = stations)
+  slope_coefs <- data.frame(station_id = station_id)
 
   # Loop through months of year
   months <- c("January", "February", "March", "April", "May", "June", "July",
