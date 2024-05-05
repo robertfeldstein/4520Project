@@ -259,7 +259,7 @@ Assumptions:
 
 ```{r}
 # Create higher resolution grid 
-res <- 100
+res <- 200
 grid <- usagrid(res)
 
 # Ensure correct types
@@ -353,11 +353,11 @@ errors are sufficiently small.
 
 ```{r}
 # Find the temperature trends for each station (since 2000)
-temp_trends <- lapply(station_info$station_id, trend_of_temps)
+temp_trends <- sapply(station_info$station_id, trend_of_temps)
 
 # Create a new data frame with station ids, temperature trend, lat and long
-station_trends <- data.frame(station_id = temp_trends$station_id, 
-                             trend = temp_trends$trend_Overall)
+station_trends <- data.frame(station_id = colnames(temp_trends), 
+                             trend = temp_trends[1,], SE = temp_trends[2,])
 # Merge df with station_info to get lat and lon
 station_trends <- merge(station_trends, station_info, by.x = "station_id", 
                         by.y = "station_id")
