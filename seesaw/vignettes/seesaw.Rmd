@@ -86,8 +86,8 @@ ggplot() +
 
 ```
 
-2. Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider
-including elevation in your model.
+2. Fit a spatial model and plot an interpolated map of average temperatures for 
+March 2024. Consider including elevation in your model.
 
 A model without elevation: 
 
@@ -117,7 +117,8 @@ library("elevatr")
 grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")],
                                           prj = st_crs(usa_boundary))$elevation
 locs <- X[, c("x", "y")]
-X$elevation <- elevatr::get_elev_point(locs, prj = st_crs(usa_boundary))$elevation
+X$elevation <- elevatr::get_elev_point(locs, prj = 
+                                         st_crs(usa_boundary))$elevation
 
 Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
 # Create model matrix
@@ -126,11 +127,17 @@ graph_interp(preds,grid)
 
 ```
 
-3. Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically. 
+3. Estimate the warmest and coldest day of the year for each station, and plot 
+those days on two maps. Think carefully about how to represent the days 
+numerically. 
 
-In your report, describe the statistical analysis that you used for estimating the warmest and coldest days at each station, including writing down any statistical models in mathematical notation. Be sure to define all your symbols and assumptions. 
+In your report, describe the statistical analysis that you used for estimating 
+the warmest and coldest days at each station, including writing down any 
+statistical models in mathematical notation. Be sure to define all your 
+symbols and assumptions. 
 
-Interpolate maps of the warmest and coldest days, and plot the interpolated maps of warmest and coldest days. 
+Interpolate maps of the warmest and coldest days, and plot the interpolated 
+maps of warmest and coldest days. 
 
 ```{r}
 
@@ -195,17 +202,22 @@ ggplot() +
 ```
 
 Note on figures: The point that looks like it is in the middle of Lake Ontario 
-is actually in Ontario, Canada. Interestingly, NOAA includes one Canadian station
-in their dataset. Although not technically a part of the "lower 48" it still
-includes valuable data for the region.
+is actually in Ontario, Canada. Interestingly, NOAA includes one Canadian 
+station in their dataset. Although not technically a part of the "lower 48" 
+it still includes valuable data for the region.
 
 Statistical Model:
 
-The estimated average warmest and coldest day of the year was calculated by fitting a sinusoidal model to the daily average temperature data for each station. The model is given by:
+The estimated average warmest and coldest day of the year was calculated by 
+fitting a sinusoidal model to the daily average temperature data for each 
+station. The model is given by:
 
 $Y_i = \beta_0 + \beta_1 * \sin(2\pi d/365) + \beta_2*\cos(2\pi d/365) + \epsilon_i$
 
-where $Y_i$ is the daily average temperature, $d$ is the day of the year, and $\epsilon_i$ is the error term. The estimated warmest day of the year is the day with the highest expected temperature, and the estimated coldest day of the year is the day with the lowest expected temperature.
+where $Y_i$ is the daily average temperature, $d$ is the day of the year, and 
+$\epsilon_i$ is the error term. The estimated warmest day of the year is the day
+with the highest expected temperature, and the estimated coldest day of the year
+is the day with the lowest expected temperature.
 
 Assumptions:
 1. The daily average temperature data is sinusoidal with a period of 365 days.
@@ -257,7 +269,9 @@ scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
 ```
 
 
-4. Make a single plot of the estimated yearly cycles for 10 different stations, highlighting a diversity of climates around the contiguous USA. Your plot should clearly indicate which cycle is from which station. 
+4. Make a single plot of the estimated yearly cycles for 10 different stations, 
+highlighting a diversity of climates around the contiguous USA. Your plot should
+clearly indicate which cycle is from which station. 
 
 ```{r}
 
@@ -289,11 +303,16 @@ plt <- plt + scale_color_manual(name = "State with Station", breaks = states,
 plt
 ```
 
-5. Estimate the trend over the years for each station, in units of degrees Fahrenheit per year, and plot the trend values on a map. Indicate visually on your map which of the trends are statistically significant.
+5. Estimate the trend over the years for each station, in units of degrees 
+Fahrenheit per year, and plot the trend values on a map. Indicate visually on 
+your map which of the trends are statistically significant.
 
-In your report, write the statistical model that you used in mathematical notation. Be sure to define all your symbols and assumptions.
+In your report, write the statistical model that you used in mathematical 
+notation. Be sure to define all your symbols and assumptions.
 
-Interpolate the estimated trends to a grid, and plot them on a map. For the interpolations, you may consider using only the trend estimates whose standard errors are sufficiently small. 
+Interpolate the estimated trends to a grid, and plot them on a map. For the 
+interpolations, you may consider using only the trend estimates whose standard
+errors are sufficiently small. 
 
 ```{r}
 # Find the temperature trends for each station (since 2000)
@@ -365,22 +384,32 @@ ggplot() +
 
 Statistical Model:
 
-The estimated trend over the years for each station was calculated by fitting a linear model for each month of the year and taking the average of the slope coefficients from each linear model. This is given by:
+The estimated trend over the years for each station was calculated by fitting a 
+linear model for each month of the year and taking the average of the slope 
+coefficients from each linear model. This is given by:
 
 $ estimated trend = ( \sum_(i = 1)^12 (\beta_1)_i )/ 12 $
 
-where $(\beta_1)_i$ denotes the slope coefficient for ith month, and is derived from the model:
+where $(\beta_1)_i$ denotes the slope coefficient for ith month, and is derived 
+from the model:
 
 $Y_i = \beta_0 + \beta_1 *d + \epsilon_i$
 
-where $Y_i$ is the daily average temperature, $d$ is the day of the year, and $\epsilon_i$ is the error term. 
+where $Y_i$ is the daily average temperature, $d$ is the day of the year, and 
+$\epsilon_i$ is the error term. 
 
 Assumptions:
-1. The change in temperature over the years can be modeled linearly. Further, we assume that the the change in monthly temperatures overall the years follows a linear trend as well.
-2. The overall trend for each month contributes equal to the station’s trend overall (that is, each month’s trend is equally indicative of the trend overall)
+1. The change in temperature over the years can be modeled linearly. Further, we
+assume that the the change in monthly temperatures overall the years follows a 
+linear trend as well.
+2. The overall trend for each month contributes equal to the station’s trend 
+overall (that is, each month’s trend is equally indicative of the trend overall)
 3. The error term is normally distributed with mean 0 and constant variance.
 
-To determine statistical significance, we assume that the temperature trends of stations are normally distributed with mean 0, indicating the temperature has not changed over the years. We run a t-test with significance level $\alpha = 0.05$ to determine which trends are significant.
+To determine statistical significance, we assume that the temperature trends of 
+stations are normally distributed with mean 0, indicating the temperature has 
+not changed over the years. We run a t-test with significance level 
+$\alpha = 0.05$ to determine which trends are significant.
 
 ```{r}
 
@@ -406,12 +435,20 @@ graph_interp(trend_preds, grid) +
 
 ```
 
-6. Find a reputable source for the average temperature trend in the contiguous USA over the past 20 years, and compare your results to the source's.
+6. Find a reputable source for the average temperature trend in the contiguous 
+USA over the past 20 years, and compare your results to the source's.
 
 Reputable Source: US EPA 
 https://www.epa.gov/climate-indicators/climate-change-indicators-us-and-global-temperature
 
-The EPA reports that the average temperature in the contiguous US has risen by 0.55°F per decade since 1981. This is equivalent to 0.306°C per decade. Our model estimates the average temperature trend in the contiguous US to be roughly 0.88°C per decade. However, this is largely due to the fact that we are only considering the temperature trends since 2000, where temperature has been increasing even faster. Additionally, it is the case that the vast majority of the US is increasing at a rate lower than 0.88°C per decade, while stations in the Southwest are increasing at a much greater rate. 
+The EPA reports that the average temperature in the contiguous US has risen by 
+0.55°F per decade since 1981. This is equivalent to 0.306°C per decade. 
+Our model estimates the average temperature trend in the contiguous US to be 
+roughly 0.88°C per decade. However, this is largely due to the fact that we are 
+only considering the temperature trends since 2000, where temperature has been 
+increasing even faster. Additionally, it is the case that the vast majority of 
+the US is increasing at a rate lower than 0.88°C per decade, while stations in 
+the Southwest are increasing at a much greater rate. 
 
 
 
