@@ -186,18 +186,51 @@ ggplot() +
        x = "Longitude", y = "Latitude") +
   scale_color_gradient(name = "Day of Year") + #, low = "blue", high = "red") +
   theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+# Plot the shapefile and add the coldest day data as points
+# ggplot() +
+#   geom_sf(data = usa_boundary) +
+#   coord_sf(lims_method = "geometry_bbox") +
+#   geom_point(data = df_warm_cold_sf, 
+#              aes(color = coldest_day, x = x, y = y), size = 1) +
+#   theme_minimal() +
+#   labs(title = "Coldest Day of the Year for Each Station", 
+#        x = "Longitude", y = "Latitude") + 
+#   scale_color_gradient(name = "Day of Year") + #, low = "blue", high = "red") +
+#   theme(plot.title = element_text(hjust = 0.5))
+
+
+# Define breaks and labels for December 1st to January 31st
+dec_jan_breaks <- c(1, 31, 62, 91)
+dec_jan_labels <- c("Dec 1", "Jan 1", "Jan 31", "Feb 28")
+
+# Function to map days from December 1st to January 31st to a continuous scale
+day_to_continuous_scale <- function(day) {
+  if (day <= 31) {
+    return(day + 31)
+  } else {
+    return(31 - (365-day)/31)
+  }
+}
+
+# Apply the function to the coldest day data
+df_warm_cold_sf$continuous_day <- sapply(df_warm_cold_sf$coldest_day, day_to_continuous_scale)
 
 # Plot the shapefile and add the coldest day data as points
 ggplot() +
   geom_sf(data = usa_boundary) +
   coord_sf(lims_method = "geometry_bbox") +
   geom_point(data = df_warm_cold_sf, 
-             aes(color = coldest_day, x = x, y = y), size = 1) +
+             aes(color = continuous_day, x = x, y = y), size = 1) +
+  scale_color_continuous(name = "Day of Year", breaks = dec_jan_breaks, labels = dec_jan_labels,
+                         trans = "reverse") +
   theme_minimal() +
   labs(title = "Coldest Day of the Year for Each Station", 
        x = "Longitude", y = "Latitude") + 
-  scale_color_gradient(name = "Day of Year") + #, low = "blue", high = "red") +
   theme(plot.title = element_text(hjust = 0.5))
+
 
 ```
 
@@ -230,12 +263,14 @@ res <- 100
 grid <- usagrid(res)
 
 # Ensure correct types
+df_warmest_coldest$rescaled_coldest <- 
+  as.numeric(df_warm_cold_sf$continuous_day)
 df_warmest_coldest$longitude <- as.numeric(df_warmest_coldest$longitude)
 df_warmest_coldest$latitude <- as.numeric(df_warmest_coldest$latitude)
 locs <- df_warmest_coldest[, c("longitude", "latitude")]
 
 # Make a dataframes of locations and y_cold/y_warm
-cold_dataset <- df_warmest_coldest[,c("longitude", "latitude", "coldest_day")]
+cold_dataset <- df_warmest_coldest[,c("longitude", "latitude", "rescaled_coldest")]
 warm_dataset <- df_warmest_coldest[,c("longitude", "latitude", "warmest_day")]
 
 # Drop repeated rows
@@ -247,7 +282,7 @@ X_cold <- as.data.frame(cbind(1, cold_dataset[, c("longitude", "latitude")]))
 names(X_cold) <- c("intercept", "x", "y")
 X_warm <- as.data.frame(cbind(1, warm_dataset[, c("longitude", "latitude")]))
 names(X_warm) <- c("intercept", "x", "y")
-y_cold <- cold_dataset$coldest_day
+y_cold <- cold_dataset$rescaled_coldest
 y_warm <- warm_dataset$warmest_day
 
 # Run the interpolations 
@@ -265,7 +300,9 @@ graph_interp(cold_pred, grid) +
   labs( title = "Interpolated Coldest Day of the Year",
     x = "Longitude", y = "Latitude", 
     fill = "Day of Year") + 
-scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
+#scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
+  scale_fill_gradient(name = "Day of Year", breaks = dec_jan_breaks, labels = dec_jan_labels,
+                         trans = "reverse", low = "blue", high = "red") 
 ```
 
 
