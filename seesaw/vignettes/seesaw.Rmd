@@ -449,10 +449,7 @@ slope coefficient into a variance, pooling the variances, and calculating the
 new standard error. That is, 
 
 $Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12}$
-<<<<<<< HEAD
 
-=======
->>>>>>> 7b390d4cc8e0fcfc9eb54c3fce5fa3b2484b7a8d
 $SE = \sqrt\frac {Pooled\ Variance}{N}$
 
 where $SE_i$ is the standard error for the ith month, $n_i$ is the number of 
