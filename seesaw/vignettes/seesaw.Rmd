@@ -1,10 +1,10 @@
 ---
 title: "seesaw"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{seesaw}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  pdf_document:
+    keep_tex: true
+  word_document: default
+vignette: "%\\VignetteIndexEntry{seesaw} %\\VignetteEngine{knitr::rmarkdown} %\\VignetteEncoding{UTF-8}\n"
 ---
 
 ```{r, include = FALSE}
@@ -363,7 +363,8 @@ errors are sufficiently small.
 
 ```{r}
 # Find the temperature trends for each station (since 2000)
-temp_trends <- sapply(station_info$station_id, seesaw::trend_of_temps)
+temp_trends <- suppressWarnings(sapply(station_info$station_id, 
+                                       seesaw::trend_of_temps))
 temp_trends <- t(temp_trends)
 
 # Create a new data frame with station ids, temperature trend, lat and long
@@ -439,7 +440,7 @@ The estimated trend over the years for each station was calculated by fitting a
 linear model for each month of the year and taking the average of the slope 
 coefficients from each linear model. This is given by:
 
-$ estimated\ trend =  \frac { \sum_{i = 1}^{12} \beta_{1i} }{12} $
+$estimated\ trend =  \frac { \sum_{i = 1}^{12} \beta_{1i} }{12}$
 
 where $\beta_{1i}$ denotes the slope coefficient for ith month, and is derived 
 from the model:
@@ -453,8 +454,8 @@ The standard error was found by converting the standard error of each month's
 slope coefficient into a variance, pooling the variances, and calculating the 
 new standard error. That is, 
 
-$ Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12} $
-$ SE = \sqrt\frac {Pooled\ Variance}{N}$
+$Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12}$
+$SE = \sqrt\frac {Pooled\ Variance}{N}$
 
 where $SE_i$ is the standard error for the ith month, $n_i$ is the number of 
 available readings for the 1st of that month at that station, and $N$ is the 
