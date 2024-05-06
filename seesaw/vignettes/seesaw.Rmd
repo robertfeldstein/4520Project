@@ -211,7 +211,8 @@ day_to_continuous_scale <- function(day) {
 }
 
 # Apply the function to the coldest day data
-df_warm_cold_sf$continuous_day <- sapply(df_warm_cold_sf$coldest_day, day_to_continuous_scale)
+df_warm_cold_sf$continuous_day <- sapply(df_warm_cold_sf$coldest_day, 
+                                         day_to_continuous_scale)
 
 # Plot the shapefile and add the coldest day data as points
 ggplot() +
@@ -268,7 +269,8 @@ df_warmest_coldest$latitude <- as.numeric(df_warmest_coldest$latitude)
 locs <- df_warmest_coldest[, c("longitude", "latitude")]
 
 # Make a dataframes of locations and y_cold/y_warm
-cold_dataset <- df_warmest_coldest[,c("longitude", "latitude", "rescaled_coldest")]
+cold_dataset <- df_warmest_coldest[,c("longitude", "latitude", 
+                                      "rescaled_coldest")]
 warm_dataset <- df_warmest_coldest[,c("longitude", "latitude", "warmest_day")]
 
 # Drop repeated rows
@@ -453,7 +455,10 @@ new standard error. That is,
 $ Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12} $
 $ SE = \sqrt\frac {Pooled\ Variance}{N}$
 
-where $SE_i$ is the standard error for the ith month, $n_i$ is the number of available readings for the 1st of that month at that station, and $N$ is the total sample size (total number of available readings for the 1st of all months between the start and end dates at that station). 
+where $SE_i$ is the standard error for the ith month, $n_i$ is the number of 
+available readings for the 1st of that month at that station, and $N$ is the 
+total sample size (total number of available readings for the 1st of all months 
+between the start and end dates at that station). 
 
 Assumptions:
 1. The change in temperature over the years can be modeled linearly. Further, we
