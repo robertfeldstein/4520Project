@@ -239,11 +239,6 @@ ggplot() +
 
 ```
 
-Note on figures: The point that looks like it is in the middle of Lake Ontario 
-is actually in Ontario, Canada. Interestingly, NOAA includes one Canadian 
-station in their dataset. Although not technically a part of the "lower 48" 
-it still includes valuable data for the region.
-
 Statistical Model:
 
 The estimated average warmest and coldest day of the year was calculated by 
