@@ -12,6 +12,8 @@ devtools::check()
 
 devtools::install(build_vignettes = T)
 
+devtools::build()
+
 export(usa_shp)
 ?usa_shp
 ?time_series_station

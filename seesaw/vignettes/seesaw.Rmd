@@ -1,10 +1,10 @@
 ---
 title: "seesaw"
-output:
-  pdf_document:
-    keep_tex: true
-  word_document: default
-vignette: "%\\VignetteIndexEntry{seesaw} %\\VignetteEngine{knitr::rmarkdown} %\\VignetteEncoding{UTF-8}\n"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{seesaw}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
