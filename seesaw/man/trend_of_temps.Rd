@@ -24,8 +24,9 @@ error. Will return a list with the trend and standard error as NA if the
 station is less than two years old.
 }
 \description{
-A function for estimating the trend of temperatures over time,
-in units of degrees Celsius per year.
+A function for estimating the trend of temperatures at one station over a
+specified period of time, given in units of degrees Celsius per year. Function
+also returns a standard error for the estimate.
 }
 \examples{
 trend_of_temps("53878", "2000-01-01", "2020-12-31")
