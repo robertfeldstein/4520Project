@@ -117,20 +117,10 @@ graph_interp(spatial_model, grid) +
 
 A model with elevation: 
 
-<<<<<<< HEAD
+
 ```{r fig.width=8, fig.height=6 }
-library("elevatr")
-=======
-```{r}
->>>>>>> 7b390d4cc8e0fcfc9eb54c3fce5fa3b2484b7a8d
 # Fit a spatial model with elevation
-
 locs <- X[, c("x", "y")]
-# X$elevation <- elevatr::get_elev_point(locs, prj = 
-#                                          st_crs(usa_boundary))$elevation
-
-# training_X <- X
-# save(training_X, file = "../data/training_X.RData")
 
 Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = elevation_grid))
 # Create model matrix
@@ -301,8 +291,8 @@ graph_interp(warm_pred, grid) +
     x = "Longitude", y = "Latitude", 
     fill = "Day of Year") +
 scale_fill_gradient(name = "Day of Year", 
-                    labels = c("Jul 20", "Jul 31", "Aug 10", "Aug 20"), 
-                       breaks = c(201, 212, 222, 232), 
+                    labels = c("Jul 21", "Jul 31", "Aug 10", "Aug 20"), 
+                       breaks = c(202, 212, 222, 232), 
                     low = "blue", high = "red", 
                     trans = "reverse") +
   guides(colour = guide_colourbar(title.vjust = 1.5)) +
@@ -314,7 +304,7 @@ graph_interp(cold_pred, grid) +
     fill = "Day of Year") + 
   scale_fill_gradient(name = "Day of Year", 
                       labels = c("Dec 20", "Jan 1", "Jan 14", "Jan 25"),
-                       breaks = c(21, 32, 45, 55.9),
+                       breaks = c(21, 32, 45, 55.8),
                       low = "blue", high = "red", trans = "reverse")  +
   guides(colour = guide_colourbar(title.vjust = 1.5)) +
   theme(legend.position = "right")
