@@ -20,7 +20,8 @@ be in the format "YYYY-MM-DD".}
 \value{
 A named list with the trend (defined as the average increase in
 temperatures on the first of the month over the dates specified) and standard
-error.
+error. Will return a list with the trend and standard error as NA if the
+station is less than two years old.
 }
 \description{
 A function for estimating the trend of temperatures over time,

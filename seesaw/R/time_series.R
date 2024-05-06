@@ -26,7 +26,6 @@ time_series_station <- function(id, start_date = 11275, end_date = 19820){
 
   # Check that start_date and end_date are both dates
   # formatted as "YYYY-MM-DD"
-
   if (!inherits(as.Date(start_date, format = "%Y-%m-%d"), "Date")){
     stop("start_date must be a date in the format 'YYYY-MM-DD'")
   }

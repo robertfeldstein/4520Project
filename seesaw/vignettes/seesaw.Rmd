@@ -107,6 +107,7 @@ graph_interp(spatial_model, grid) +
   labs( title = "Interpolated Average Temperatures for March 2024",
     x = "Longitude", y = "Latitude", 
     fill = "Temperature (°C)")
+
 ```
 
 A model with elevation: 
@@ -123,7 +124,10 @@ X$elevation <- elevatr::get_elev_point(locs, prj =
 Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
 # Create model matrix
 preds <- interpolate_grid(X, y, Xpred = Xpred)
-graph_interp(preds,grid)
+graph_interp(preds,grid) + 
+  labs( title = "Interpolated Average Temperatures for March 2024",
+    x = "Longitude", y = "Latitude", 
+    fill = "Temperature (°C)")
 
 ```
 
@@ -184,27 +188,18 @@ ggplot() +
   theme_minimal() +
   labs(title = "Warmest Day of the Year for Each Station", 
        x = "Longitude", y = "Latitude") +
-  scale_color_gradient(name = "Day of Year") + #, low = "blue", high = "red") +
+  scale_color_gradient(name = "Day of Year", 
+                       labels = c("Jun 23", "Jul 1", "Jul 15", "Jul 31", 
+                                  "Aug 15", "Aug 30"), 
+                       breaks = c(174, 184, 196, 212, 227, 242), 
+                       trans = "reverse", low = "blue", high = "red") +
+  guides(colour = guide_colourbar(title.vjust = 1.5)) +
   theme(plot.title = element_text(hjust = 0.5))
+
+
 ```
 
 ```{r}
-# Plot the shapefile and add the coldest day data as points
-# ggplot() +
-#   geom_sf(data = usa_boundary) +
-#   coord_sf(lims_method = "geometry_bbox") +
-#   geom_point(data = df_warm_cold_sf, 
-#              aes(color = coldest_day, x = x, y = y), size = 1) +
-#   theme_minimal() +
-#   labs(title = "Coldest Day of the Year for Each Station", 
-#        x = "Longitude", y = "Latitude") + 
-#   scale_color_gradient(name = "Day of Year") + #, low = "blue", high = "red") +
-#   theme(plot.title = element_text(hjust = 0.5))
-
-
-# Define breaks and labels for December 1st to January 31st
-dec_jan_breaks <- c(1, 31, 62, 91)
-dec_jan_labels <- c("Dec 1", "Jan 1", "Jan 31", "Feb 28")
 
 # Function to map days from December 1st to January 31st to a continuous scale
 day_to_continuous_scale <- function(day) {
@@ -224,11 +219,14 @@ ggplot() +
   coord_sf(lims_method = "geometry_bbox") +
   geom_point(data = df_warm_cold_sf, 
              aes(color = continuous_day, x = x, y = y), size = 1) +
-  scale_color_continuous(name = "Day of Year", breaks = dec_jan_breaks, labels = dec_jan_labels,
-                         trans = "reverse") +
+  scale_color_gradient(name = "Day of Year",
+                       labels = c("Dec 21", "Jan 1", "Jan 15", "Jan 30"),
+                       breaks = c(21, 32, 46, 62),
+                       trans = "reverse", low = "blue", high = "red") +
   theme_minimal() +
   labs(title = "Coldest Day of the Year for Each Station", 
        x = "Longitude", y = "Latitude") + 
+  guides(colour = guide_colourbar(title.vjust = 1.5)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -294,15 +292,24 @@ graph_interp(warm_pred, grid) +
   labs( title = "Interpolated Warmest Day of the Year",
     x = "Longitude", y = "Latitude", 
     fill = "Day of Year") +
-scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
+scale_fill_gradient(name = "Day of Year", 
+                    labels = c("Jul 20", "Jul 31", "Aug 10", "Aug 20"), 
+                       breaks = c(201, 212, 222, 232), 
+                    low = "blue", high = "red", 
+                    trans = "reverse") +
+  guides(colour = guide_colourbar(title.vjust = 1.5)) +
+  theme(legend.position = "right")
 
 graph_interp(cold_pred, grid) + 
   labs( title = "Interpolated Coldest Day of the Year",
     x = "Longitude", y = "Latitude", 
     fill = "Day of Year") + 
-#scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
-  scale_fill_gradient(name = "Day of Year", breaks = dec_jan_breaks, labels = dec_jan_labels,
-                         trans = "reverse", low = "blue", high = "red") 
+  scale_fill_gradient(name = "Day of Year", 
+                      labels = c("Dec 20", "Jan 1", "Jan 14", "Jan 25"),
+                       breaks = c(21, 32, 45, 55.9),
+                      low = "blue", high = "red", trans = "reverse")  +
+  guides(colour = guide_colourbar(title.vjust = 1.5)) +
+  theme(legend.position = "right")
 ```
 
 

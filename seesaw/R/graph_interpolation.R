@@ -21,7 +21,7 @@
 #' @export
 
 
-graph_interp <- function(preds,grid){
+graph_interp <- function(preds, grid){
 
   # Check that preds is numeric
   if (!is.numeric(preds)) {

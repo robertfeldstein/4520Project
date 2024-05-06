@@ -1,6 +1,10 @@
 #' A function for estimating the trend of temperatures over time,
 #' in units of degrees Celsius per year.
 #'
+#' A function for estimating the trend of temperatures at one station over a
+#' specified period of time, given in units of degrees Celsius per year. Function
+#' also returns a standard error for the estimate.
+#'
 #' @param station_id The WBANNO of the station to estimate the temperature trend for, formatted
 #' as a character. Expects a WBANNO present in the station_info data frame.
 #' @param date_start A character vector of the start date for the analysis. It
@@ -74,7 +78,6 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
     } else {
       se <- NA
     }
-
 
     # Convert the slope to units of degrees Celsius per year
     slope_degrees_per_year <- slope * 365

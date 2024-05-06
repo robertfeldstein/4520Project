@@ -2,8 +2,9 @@
 #' A function for interpolating data from the stations to a grid points within
 #' the contiguous USA.
 #'
-#' The function takes a start, end date, variable, and resolution as input to
-#' interpolate that variable over the lower 48 states during that time period.
+#' The function takes in a design matrix, response variable, resolution,
+#' and optional design matrix for the prediction grid (if additional covariates
+#' are desired) as input to interpolate that variable over the lower 48 states.
 #'
 #' @param X The design matrix. Expects a dataframe with one column of 1s for
 #' the intercept, an 'x' column for the longitude, and a 'y' column for the

@@ -1,7 +1,7 @@
 #'
 #' A function for estimating the yearly cycle for one station.
 #'
-#'  A function for estimating the yearly cycle for one station. A yearly cycle is
+#' A function for estimating the yearly cycle for one station. A yearly cycle is
 #' simply the expected temperature on each day of the year.
 #'
 #' @param id The WBANNO of the station to estimate the yearly cycle for, formatted
