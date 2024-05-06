@@ -19,10 +19,6 @@
 
 time_series_station <- function(id, start_date = 11275, end_date = 19820){
 
-  # Load tables
-  # data("full_table", package = "seesaw")
-  # data("station_info", package = "seesaw")
-
   # Check that id is in the station_info data frame
   if (!(id %in% station_info$station_id)){
     stop("id must be in the station_info data frame")

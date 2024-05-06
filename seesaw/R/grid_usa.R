@@ -35,10 +35,6 @@ usagrid <- function(resolution=50) {
   subset_indices <- x_coords > -125.0 & x_coords < -66.93457 & y_coords > 22.396308 & y_coords < 49.384358
   x_coords <- x_coords[subset_indices]
   y_coords <- y_coords[subset_indices]
-  # x_coords <- x_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
-  #                       24.396308 & y_coords < 49.384358]
-  # y_coords <- y_coords[x_coords > -125.0 & x_coords < -66.93457 & y_coords >
-  #                       24.396308 & y_coords < 49.384358]
 
   # Create a grid of points within the bounding box of the multi-polygon
   x <- seq(min(x_coords), max(x_coords), length.out = resolution)
@@ -63,10 +59,6 @@ usagrid <- function(resolution=50) {
   grid_df$y <- grid_df$coordinates[, 2]
   grid_df <- grid_df[, c("x", "y")]
 
-  # Filter out the points that are not in the United States bounding box
-  # Here we are removing Alaska, Hawaii, and the territories
-  # grid_df <- grid_df[grid_df$x > -125.0 & grid_df$x < -66.93457 & grid_df$y >
-  #                      24.396308 & grid_df$y < 49.384358, ]
   return(grid_df)
 
 }
