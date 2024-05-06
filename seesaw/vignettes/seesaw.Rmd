@@ -36,9 +36,7 @@ station_info <- station_info[!is.na(station_info$state),]
 
 ```
 
-
-1. Make a map of the average temperature at each station for the month of March 
-2024.
+1. A map of the average temperature at each station for March 2024.
 
 ```{r fig.width=8, fig.height=6 }
 # Get list of station ids 
@@ -91,8 +89,10 @@ ggplot() +
 
 ```
 
-2. Fit a spatial model and plot an interpolated map of average temperatures for 
-March 2024. Consider including elevation in your model.
+\newpage
+
+2. A spatial model and plot an interpolated map of average temperatures for 
+March 2024. 
 
 A model without elevation: 
 
@@ -132,17 +132,9 @@ graph_interp(preds,grid) +
 
 ```
 
-3. Estimate the warmest and coldest day of the year for each station, and plot 
-those days on two maps. Think carefully about how to represent the days 
-numerically. 
+\newpage
 
-In your report, describe the statistical analysis that you used for estimating 
-the warmest and coldest days at each station, including writing down any 
-statistical models in mathematical notation. Be sure to define all your 
-symbols and assumptions. 
-
-Interpolate maps of the warmest and coldest days, and plot the interpolated 
-maps of warmest and coldest days. 
+3. Plots of the warmest and coldest day of the year for each station.
 
 ```{r fig.width=8, fig.height=6 }
 
@@ -250,6 +242,8 @@ Assumptions:
 2. The daily average temperature data is stationary over time.
 3. The error term is normally distributed with mean 0 and constant variance.
 
+Interpolated maps of the warmest and coldest days:
+
 ```{r fig.width=8, fig.height=6 }
 # Create higher resolution grid 
 res <- 200
@@ -308,10 +302,10 @@ graph_interp(cold_pred, grid) +
   theme(legend.position = "right")
 ```
 
+\newpage
 
-4. Make a single plot of the estimated yearly cycles for 10 different stations, 
-highlighting a diversity of climates around the contiguous USA. Your plot should
-clearly indicate which cycle is from which station. 
+4. A single plot of the estimated yearly cycles for 10 different stations, 
+highlighting a diversity of climates around the contiguous USA. 
 
 ```{r fig.width=8, fig.height=6 }
 
@@ -343,16 +337,10 @@ plt <- plt + scale_color_manual(name = "State with Station", breaks = states,
 plt
 ```
 
-5. Estimate the trend over the years for each station, in units of degrees 
-Fahrenheit per year, and plot the trend values on a map. Indicate visually on 
-your map which of the trends are statistically significant.
+\newpage
 
-In your report, write the statistical model that you used in mathematical 
-notation. Be sure to define all your symbols and assumptions.
-
-Interpolate the estimated trends to a grid, and plot them on a map. For the 
-interpolations, you may consider using only the trend estimates whose standard
-errors are sufficiently small. 
+5. Estimated trends over the years for each station, in units of degrees 
+Celsius per year. 
 
 ```{r warning = FALSE, fig.width=8, fig.height=6 }
 # Find the temperature trends for each station (since 2000)
@@ -468,6 +456,8 @@ stations are normally distributed with mean 0, indicating the temperature has
 not changed over the years. We run a t-test with significance level 
 $\alpha = 0.05$ to determine which trends are significant.
 
+Interpolated estimated trends to a grid, using only significant points: 
+
 ```{r fig.width=8, fig.height=6 }
 
 res <- 100
@@ -495,10 +485,12 @@ graph_interp(trend_preds, grid) +
 
 ```
 
-6. Find a reputable source for the average temperature trend in the contiguous 
-USA over the past 20 years, and compare your results to the source's.
+\newpage
+
+6. EPA Comparison:
 
 Reputable Source: US EPA 
+
 https://www.epa.gov/climate-indicators/climate-change-indicators-us-and-global-temperature
 
 ```{r}
