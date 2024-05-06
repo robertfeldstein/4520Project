@@ -358,12 +358,7 @@ errors are sufficiently small.
 
 ```{r warning = FALSE, fig.width=8, fig.height=6 }
 # Find the temperature trends for each station (since 2000)
-<<<<<<< HEAD
 temp_trends <-  sapply(station_info$station_id, seesaw::trend_of_temps) 
-=======
-temp_trends <- suppressWarnings(sapply(station_info$station_id, 
-                                       seesaw::trend_of_temps))
->>>>>>> 7b390d4cc8e0fcfc9eb54c3fce5fa3b2484b7a8d
 temp_trends <- t(temp_trends)
 
 # Create a new data frame with station ids, temperature trend, lat and long
