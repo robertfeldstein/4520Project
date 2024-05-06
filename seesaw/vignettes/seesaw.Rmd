@@ -150,9 +150,7 @@ maps of warmest and coldest days.
 # for a given station
 warmest_coldest <- function(station_id){
   cycle <- yearly_cycle_station(station_id, "T_DAILY_AVG")
-  #warmest_day <- cycle$DOY[which.max(cycle$Expected_T_DAILY_AVG)]
   warmest_day <- which.max(cycle$Expected_T_DAILY_AVG)
-  #coldest_day <- cycle$DOY[which.min(cycle$Expected_T_DAILY_AVG)]
   coldest_day <- which.min(cycle$Expected_T_DAILY_AVG)
   return(c(warmest_day, coldest_day))
 }
