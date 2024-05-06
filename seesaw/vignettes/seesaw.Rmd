@@ -31,6 +31,9 @@ data("shp_file", package = "seesaw")
 data("elevation_grid", package = "seesaw")
 data("training_X", package = "seesaw")
 
+# remove canadian NOAA stations
+station_info <- station_info[!is.na(station_info$state),]
+
 ```
 
 
@@ -128,7 +131,7 @@ Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = elevation_grid))
 # Create model matrix
 preds <- interpolate_grid(training_X, y, Xpred = Xpred)
 graph_interp(preds,grid) + 
-  labs( title = "Interpolated Average Temperatures for March 2024",
+  labs( title = "Interpolated Average Temperatures for March 2024 with Elevation",
     x = "Longitude", y = "Latitude", 
     fill = "Temperature (°C)")
 
@@ -518,10 +521,10 @@ The EPA reports that the average temperature in the contiguous US has risen by
 0.55°F per decade since 1981. This is equivalent to 0.306°C per decade. 
 Our model estimates the average temperature trend in the contiguous US to be 
 roughly 0.73°C per decade. However, this is largely due to the fact that we are 
-only considering the temperature trends since 2000, where temperature has been 
-increasing even faster. Additionally, it is the case that the vast majority of 
-the US is increasing at a rate lower than 0.73°C per decade, while stations in 
-the Southwest are increasing at a much greater rate. 
+only considering the temperature trends since 2000, where according to the EPA, 
+temperature has been increasing even faster. Additionally, it is the case that 
+the vast majority of the US is increasing at a rate lower than 0.73°C per 
+decade, while stations in the Southwest are increasing at a much greater rate. 
 
 
 
