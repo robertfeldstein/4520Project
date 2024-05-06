@@ -35,7 +35,7 @@ data("shp_file", package = "seesaw")
 1. Make a map of the average temperature at each station for the month of March 
 2024.
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 # Get list of station ids 
 station_ids <- station_info$station_id
 
@@ -91,7 +91,7 @@ March 2024. Consider including elevation in your model.
 
 A model without elevation: 
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 # Set up the grid for interpolation 
 res <- 50
 grid <- usagrid(res)
@@ -112,7 +112,7 @@ graph_interp(spatial_model, grid) +
 
 A model with elevation: 
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 library("elevatr")
 # Fit a spatial model with elevation
 grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")],
@@ -143,7 +143,7 @@ symbols and assumptions.
 Interpolate maps of the warmest and coldest days, and plot the interpolated 
 maps of warmest and coldest days. 
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 
 # Create a function for finding the estimated warmest and coldest days of year
 # for a given station
@@ -199,7 +199,7 @@ ggplot() +
 
 ```
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 
 # Function to map days from December 1st to January 31st to a continuous scale
 day_to_continuous_scale <- function(day) {
@@ -255,7 +255,7 @@ Assumptions:
 2. The daily average temperature data is stationary over time.
 3. The error term is normally distributed with mean 0 and constant variance.
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 # Create higher resolution grid 
 res <- 200
 grid <- usagrid(res)
@@ -317,7 +317,7 @@ graph_interp(cold_pred, grid) +
 highlighting a diversity of climates around the contiguous USA. Your plot should
 clearly indicate which cycle is from which station. 
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 
 # Select 10 stations from around the contiguous USA
 # ( Maine, Washington, Arizona, Wyoming, Oklahoma, Texas, Kentucky, Florida, 
@@ -358,9 +358,9 @@ Interpolate the estimated trends to a grid, and plot them on a map. For the
 interpolations, you may consider using only the trend estimates whose standard
 errors are sufficiently small. 
 
-```{r}
+```{r warning = FALSE, fig.width=8, fig.height=6 }
 # Find the temperature trends for each station (since 2000)
-temp_trends <- sapply(station_info$station_id, seesaw::trend_of_temps)
+temp_trends <-  sapply(station_info$station_id, seesaw::trend_of_temps) 
 temp_trends <- t(temp_trends)
 
 # Create a new data frame with station ids, temperature trend, lat and long
@@ -450,8 +450,9 @@ The standard error was found by converting the standard error of each month's
 slope coefficient into a variance, pooling the variances, and calculating the 
 new standard error. That is, 
 
-$ Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12} $
-$ SE = \sqrt\frac {Pooled\ Variance}{N}$
+$Pooled\ Variance = \frac {\sum_{i=1}^{12}SE_i\ *\  n_i}{N - 12}$
+
+$SE = \sqrt\frac {Pooled\ Variance}{N}$
 
 where $SE_i$ is the standard error for the ith month, $n_i$ is the number of available readings for the 1st of that month at that station, and $N$ is the total sample size (total number of available readings for the 1st of all months between the start and end dates at that station). 
 
@@ -468,7 +469,7 @@ stations are normally distributed with mean 0, indicating the temperature has
 not changed over the years. We run a t-test with significance level 
 $\alpha = 0.05$ to determine which trends are significant.
 
-```{r}
+```{r fig.width=8, fig.height=6 }
 
 res <- 100
 
