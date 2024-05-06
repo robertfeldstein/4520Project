@@ -8,14 +8,15 @@ in units of degrees Celsius per year.}
 trend_of_temps(station_id, date_start = "2000-01-01", date_end = "2024-12-31")
 }
 \arguments{
-\item{station_id}{The WBANNO of the station to estimate the temperature trend for, formatted
+\item{station_id}{The WBANNO of the station to estimate the temperature trend
+for, formatted
 as a character. Expects a WBANNO present in the station_info data frame.}
 
 \item{date_start}{A character vector of the start date for the analysis. It
 should be in the format "YYYY-MM-DD".}
 
-\item{date_end}{A character vector of the end date for the analysis. It should
-be in the format "YYYY-MM-DD".}
+\item{date_end}{A character vector of the end date for the analysis. It
+should be in the format "YYYY-MM-DD".}
 }
 \value{
 A named list with the trend (defined as the average increase in
@@ -25,8 +26,8 @@ station is less than two years old.
 }
 \description{
 A function for estimating the trend of temperatures at one station over a
-specified period of time, given in units of degrees Celsius per year. Function
-also returns a standard error for the estimate.
+specified period of time, given in units of degrees Celsius per year.
+Function also returns a standard error for the estimate.
 }
 \examples{
 trend_of_temps("53878", "2000-01-01", "2020-12-31")

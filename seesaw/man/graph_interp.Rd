@@ -7,13 +7,14 @@
 graph_interp(preds, grid)
 }
 \arguments{
-\item{preds}{A vector of predictions to be interpolated over the US grid. Preds
-should be generated from the `interpolate_grid` function.}
+\item{preds}{A vector of predictions to be interpolated over the US grid.
+Preds should be generated from the `interpolate_grid` function.}
 
 \item{grid}{A dataframe with columns x and y that represents the US grid.}
 }
 \value{
-A ggplot2 object that graphs the interpolated values over the US grid.
+A ggplot2 object that graphs the interpolated values over the US
+grid.
 }
 \description{
 The function takes a vector of predictions and graphs them over the US grid

@@ -12,8 +12,8 @@ A data frame with 13 columns and 1134574 rows
 \item{state}{The state in which the weather station is located}
 \item{station_name}{The name of the weather station}
 \item{LST_DATE}{The date of the weather data}
-\item{CRX_VN}{The version number of the station datalogger program that was in
-effect at the time of the observation. Note: This field should be
+\item{CRX_VN}{The version number of the station datalogger program that was
+in effect at the time of the observation. Note: This field should be
 treated as text (i.e. string).}
 \item{LONGITUDE}{The longitude of the weather station}
 \item{LATITUDE}{The latitude of the weather station}
@@ -30,7 +30,7 @@ treated as text (i.e. string).}
 full_table
 }
 \description{
-A dataframe containing the daily weather data for each weather station in the U.S.
-between 2000 and 2024.
+A dataframe containing the daily weather data for each weather station in the
+U.S. between 2000 and 2024.
 }
 \keyword{datasets}

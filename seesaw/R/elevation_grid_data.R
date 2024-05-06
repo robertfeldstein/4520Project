@@ -1,5 +1,5 @@
 #'
-#' An R dataframe of latitude and longitude over the continental United States
+#' An R dataframe of latitude and longitude over the continental United States.
 #'
 #' The dataframe of points is composed for a resolution 50 grid.
 #'

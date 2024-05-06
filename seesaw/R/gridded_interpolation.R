@@ -20,14 +20,16 @@
 #' the intercept, an 'x' column for the longitude, and a 'y' column for the
 #' latitude. Additional columns can be included to account for other covariates.
 #'
-#' @param resolution The resolution of the grid to interpolate the variable over.
+#' @param resolution The resolution of the grid to interpolate the variable
+#' over.
 #'
 #' @return A data frame containing the interpolated values for the specified
 #' variable over the contiguous USA.
 #'
 #' @examples
 #'
-#' X <- data.frame(x = c(runif(100,min = -102, max = -81)), y = c(runif(100,min = 31, max = 37)))
+#' X <- data.frame(x = c(runif(100,min = -102, max = -81)),
+#' y = c(runif(100,min = 31, max = 37)))
 #' X <- as.data.frame(cbind(1, X))
 #' y <- c(runif(100, min = 0, max = 20))
 #' interpolate_grid(X, y, Xpred = NULL, resolution = 20)
@@ -36,7 +38,8 @@
 
 interpolate_grid <- function(X, y, Xpred = NULL, resolution = 50){
 
-  # Check that X is a data frame with a column of 1s, a column for x, and a column for y
+  # Check that X is a data frame with a column of 1s, a column for x,
+  # and a column for y
   if (!is.data.frame(X) | !all(c("x", "y") %in% colnames(X))){
     stop("X must be a data frame with columns x and y")
   }
@@ -51,7 +54,8 @@ interpolate_grid <- function(X, y, Xpred = NULL, resolution = 50){
     stop("X and y must not contain missing data")
   }
 
-  # Check that Xpred is NULL or a data frame with a column of 1s, a column for x, and a column for y
+  # Check that Xpred is NULL or a data frame with a column of 1s, a column for
+  # x, and a column for y
   if (!is.null(Xpred)){
     if (!is.data.frame(Xpred) | !all(c("x", "y") %in% colnames(Xpred))){
       stop("Xpred must be a data frame with columns x and y")

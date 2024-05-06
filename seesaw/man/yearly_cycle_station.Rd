@@ -7,8 +7,9 @@
 yearly_cycle_station(id, variable = "T_DAILY_AVG")
 }
 \arguments{
-\item{id}{The WBANNO of the station to estimate the yearly cycle for, formatted
-as a character. Expects a WBANNO present in the station_info data frame.}
+\item{id}{The WBANNO of the station to estimate the yearly cycle for,
+formatted as a character. Expects a WBANNO present in the station_info data
+frame.}
 
 \item{variable}{The variable to estimate the yearly cycle for.
 Default is "T_DAILY_AVG". Expects a variable present in the full_table

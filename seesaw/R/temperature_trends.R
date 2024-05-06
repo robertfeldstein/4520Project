@@ -2,15 +2,16 @@
 #' in units of degrees Celsius per year.
 #'
 #' A function for estimating the trend of temperatures at one station over a
-#' specified period of time, given in units of degrees Celsius per year. Function
-#' also returns a standard error for the estimate.
+#' specified period of time, given in units of degrees Celsius per year.
+#' Function also returns a standard error for the estimate.
 #'
-#' @param station_id The WBANNO of the station to estimate the temperature trend for, formatted
+#' @param station_id The WBANNO of the station to estimate the temperature trend
+#' for, formatted
 #' as a character. Expects a WBANNO present in the station_info data frame.
 #' @param date_start A character vector of the start date for the analysis. It
 #' should be in the format "YYYY-MM-DD".
-#' @param date_end A character vector of the end date for the analysis. It should
-#' be in the format "YYYY-MM-DD".
+#' @param date_end A character vector of the end date for the analysis. It
+#' should be in the format "YYYY-MM-DD".
 #' @return A named list with the trend (defined as the average increase in
 #' temperatures on the first of the month over the dates specified) and standard
 #' error. Will return a list with the trend and standard error as NA if the
@@ -95,7 +96,8 @@ trend_of_temps <- function(station_id, date_start = "2000-01-01",
   # Find the standard error
   if (!anyNA(slope_coefs$SE)){
     vars <- (slope_coefs$SE)^2 * slope_coefs$n
-    varPooled <- sum( vars * ( slope_coefs$n - 1) ) / ( sum(slope_coefs$n) - 12 )
+    varPooled <- sum( vars * ( slope_coefs$n - 1) ) / ( sum(slope_coefs$n) -
+                                                          12 )
     SE <- sqrt(varPooled / sum(slope_coefs$n) )
   } else{
     SE <- NA

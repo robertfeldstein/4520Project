@@ -22,7 +22,8 @@ specified resolution. Xpred expects a dataframe with one column of 1s for
 the intercept, an 'x' column for the longitude, and a 'y' column for the
 latitude. Additional columns can be included to account for other covariates.}
 
-\item{resolution}{The resolution of the grid to interpolate the variable over.}
+\item{resolution}{The resolution of the grid to interpolate the variable
+over.}
 }
 \value{
 A data frame containing the interpolated values for the specified
@@ -35,7 +36,8 @@ are desired) as input to interpolate that variable over the lower 48 states.
 }
 \examples{
 
-X <- data.frame(x = c(runif(100,min = -102, max = -81)), y = c(runif(100,min = 31, max = 37)))
+X <- data.frame(x = c(runif(100,min = -102, max = -81)),
+y = c(runif(100,min = 31, max = 37)))
 X <- as.data.frame(cbind(1, X))
 y <- c(runif(100, min = 0, max = 20))
 interpolate_grid(X, y, Xpred = NULL, resolution = 20)

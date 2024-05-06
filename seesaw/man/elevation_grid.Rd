@@ -3,7 +3,7 @@
 \docType{data}
 \name{elevation_grid}
 \alias{elevation_grid}
-\title{An R dataframe of latitude and longitude over the continental United States}
+\title{An R dataframe of latitude and longitude over the continental United States.}
 \format{
 A data frame with 3 columns and 1372 rows
 

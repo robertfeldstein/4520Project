@@ -4,8 +4,10 @@
 #' A function for estimating the yearly cycle for one station. A yearly cycle is
 #' simply the expected temperature on each day of the year.
 #'
-#' @param id The WBANNO of the station to estimate the yearly cycle for, formatted
-#' as a character. Expects a WBANNO present in the station_info data frame.
+#' @param id The WBANNO of the station to estimate the yearly cycle for,
+#' formatted as a character. Expects a WBANNO present in the station_info data
+#' frame.
+#'
 #' @param variable The variable to estimate the yearly cycle for.
 #' Default is "T_DAILY_AVG". Expects a variable present in the full_table
 #' data frame.

@@ -32,7 +32,8 @@ usagrid <- function(resolution=50) {
   y_coords <- sf::st_coordinates(multi_polygon)[, 2]
 
   # Subset the coordinates to only include the contiguous United States
-  subset_indices <- x_coords > -125.0 & x_coords < -66.93457 & y_coords > 22.396308 & y_coords < 49.384358
+  subset_indices <- x_coords > -125.0 & x_coords < -66.93457 & y_coords >
+    22.396308 & y_coords < 49.384358
   x_coords <- x_coords[subset_indices]
   y_coords <- y_coords[subset_indices]
 

@@ -5,7 +5,7 @@
 \alias{training_X}
 \title{An R dataframe of latitude and longitude over NOAA weather stations.}
 \format{
-A data frame with 4 columns and 135 rows
+A data frame with 4 columns and 135 rows.
 
 \describe{
  \item{(Intercept)}{a numeric vector of intercept values}
@@ -19,6 +19,6 @@ training_X
 }
 \description{
 The dataframe of points is composed for NOAA stations that existed between
-2000 and 2024
+2000 and 2024.
 }
 \keyword{datasets}

@@ -6,12 +6,13 @@
 #' at a given resolution. The function uses the `grid_usa` function from seesaw
 #' to plot the predictions over the US grid.
 #'
-#' @param preds A vector of predictions to be interpolated over the US grid. Preds
-#' should be generated from the `interpolate_grid` function.
+#' @param preds A vector of predictions to be interpolated over the US grid.
+#' Preds should be generated from the `interpolate_grid` function.
 #'
 #' @param grid A dataframe with columns x and y that represents the US grid.
 #'
-#' @return A ggplot2 object that graphs the interpolated values over the US grid.
+#' @return A ggplot2 object that graphs the interpolated values over the US
+#' grid.
 #'
 #' @examples
 #' grid <- usagrid(50)
