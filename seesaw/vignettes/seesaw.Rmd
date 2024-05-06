@@ -292,14 +292,12 @@ cold_pred <- interpolate_grid(X_cold,y_cold, resolution = res)
 # Plot interpolations
 graph_interp(warm_pred, grid) + 
   labs( title = "Interpolated Warmest Day of the Year",
-    x = "Longitude", y = "Latitude", 
-    fill = "Day of Year") +
+    x = "Longitude", y = "Latitude") +
 scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
 
 graph_interp(cold_pred, grid) + 
   labs( title = "Interpolated Coldest Day of the Year",
-    x = "Longitude", y = "Latitude", 
-    fill = "Day of Year") + 
+    x = "Longitude", y = "Latitude") + 
 #scale_fill_gradient(name = "Day of Year", low = "blue", high = "red")
   scale_fill_gradient(name = "Day of Year", breaks = dec_jan_breaks, labels = dec_jan_labels,
                          trans = "reverse", low = "blue", high = "red") 
