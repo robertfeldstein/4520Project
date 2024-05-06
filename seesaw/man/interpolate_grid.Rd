@@ -29,8 +29,9 @@ A data frame containing the interpolated values for the specified
 variable over the contiguous USA.
 }
 \description{
-The function takes a start, end date, variable, and resolution as input to
-interpolate that variable over the lower 48 states during that time period.
+The function takes in a design matrix, response variable, resolution,
+and optional design matrix for the prediction grid (if additional covariates
+are desired) as input to interpolate that variable over the lower 48 states.
 }
 \examples{
 

@@ -28,6 +28,8 @@ library(GpGp)
 data("full_table", package = "seesaw")
 data("station_info", package = "seesaw")
 data("shp_file", package = "seesaw")
+data("elevation_grid", package = "seesaw")
+data("training_X", package = "seesaw")
 
 ```
 
@@ -113,17 +115,18 @@ graph_interp(spatial_model, grid) +
 A model with elevation: 
 
 ```{r}
-library("elevatr")
 # Fit a spatial model with elevation
-grid$elevation <- elevatr::get_elev_point(grid[, c("x", "y")],
-                                          prj = st_crs(usa_boundary))$elevation
-locs <- X[, c("x", "y")]
-X$elevation <- elevatr::get_elev_point(locs, prj = 
-                                         st_crs(usa_boundary))$elevation
 
-Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = grid))
+locs <- X[, c("x", "y")]
+# X$elevation <- elevatr::get_elev_point(locs, prj = 
+#                                          st_crs(usa_boundary))$elevation
+
+# training_X <- X
+# save(training_X, file = "../data/training_X.RData")
+
+Xpred <- as.data.frame(model.matrix(~ x+y+elevation, data = elevation_grid))
 # Create model matrix
-preds <- interpolate_grid(X, y, Xpred = Xpred)
+preds <- interpolate_grid(training_X, y, Xpred = Xpred)
 graph_interp(preds,grid) + 
   labs( title = "Interpolated Average Temperatures for March 2024",
     x = "Longitude", y = "Latitude", 
