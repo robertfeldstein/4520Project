@@ -92,10 +92,6 @@ attribute_extract <- function(txt_file){
              state, "longitude" = longitude, "latitude" = latitude))
 }
 
-# Check to make sure the function works
-example_txt <- attribute_extract(
-  "./NOAA_DATA/2000/CRND0103-2000-NC_Asheville_8_SSW.txt")
-
 # Loop over all of the directories and extract the station information
 # Save the directory information as a row in a data frame
 station_info <- data.frame(matrix(ncol=5,nrow=0))
