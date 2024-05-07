@@ -47,7 +47,7 @@ test_that( "interpolate_grid looks okay", {
   )
 
   # Test 2: Interpolation of default variable (T_DAILY_AVG) in 2008,
-  #         with default resolution (200)
+  #         with default resolution
   preds2 <- interpolate_grid(X= X, y = y, Xpred = NULL, resolution = 50)
   # Check to make sure that defaults are functioning as expected
   expect_equal(
